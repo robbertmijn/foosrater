@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Game</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Edit Game</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="red_player1">Red Player 1:</label>
+                <input type="text" id="red_player1" name="red_player1" class="form-control" value="{{ game.red_player1 }}" required>
+            </div>
+            <div class="form-group">
+                <label for="red_player2">Red Player 2:</label>
+                <input type="text" id="red_player2" name="red_player2" class="form-control" value="{{ game.red_player2 }}" required>
+            </div>
+            <div class="form-group">
+                <label for="blue_player1">Blue Player 1:</label>
+                <input type="text" id="blue_player1" name="blue_player1" class="form-control" value="{{ game.blue_player1 }}" required>
+            </div>
+            <div class="form-group">
+                <label for="blue_player2">Blue Player 2:</label>
+                <input type="text" id="blue_player2" name="blue_player2" class="form-control" value="{{ game.blue_player2 }}" required>
+            </div>
+            <div class="form-group">
+                <label for="result">Result:</label>
+                <select id="result" name="result" class="form-control" required>
+                    <option value="red" {% if game.result == 'red' %}selected{% endif %}>Red Team Wins</option>
+                    <option value="blue" {% if game.result == 'blue' %}selected{% endif %}>Blue Team Wins</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" class="form-control" value="{{ game.date }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Game</button>
+        </form>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        if (!document.getElementById('date').value) {
+            document.getElementById('date').valueAsDate = new Date();
+        }
+    </script>
+</body>
+</html>

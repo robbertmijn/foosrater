@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Liv",
+        "elo": 999.0
+    },
+    {
+        "name": "Birgit",
+        "elo": 999.0
+    },
+    {
+        "name": "Ivana",
+        "elo": 1017.0
+    },
+    {
+        "name": "Robbert",
+        "elo": 1017.0
+    },
+    {
+        "name": "Tjalling",
+        "elo": 984.0
+    },
+    {
+        "name": "Puck",
+        "elo": 984.0
+    }
+]

@@ -1,0 +1,20 @@
+[
+    {
+        "red_player1": "Birgit",
+        "red_player2": "Liv",
+        "blue_player1": "Tjalling",
+        "blue_player2": "Puck",
+        "result": "red",
+        "date": "2024-06-11",
+        "timestamp": "2024-06-11 00:00:00"
+    },
+    {
+        "red_player1": "Birgit",
+        "red_player2": "Liv",
+        "blue_player1": "Robbert",
+        "blue_player2": "Ivana",
+        "result": "blue",
+        "date": "2024-06-11",
+        "timestamp": "2024-06-11 00:00:00"
+    }
+]
