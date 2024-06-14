@@ -1,20 +1,172 @@
 [
     {
-        "red_player1": "Birgit",
-        "red_player2": "Liv",
-        "blue_player1": "Tjalling",
-        "blue_player2": "Puck",
-        "result": "red",
-        "date": "2024-06-11",
-        "timestamp": "2024-06-11 00:00:00"
+        "red_player1": "Ivana",
+        "red_player2": "Anne",
+        "blue_player1": "Tjeerd",
+        "blue_player2": "Willeke",
+        "blue_goals": "10",
+        "red_goals": "3",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
     },
     {
-        "red_player1": "Birgit",
-        "red_player2": "Liv",
-        "blue_player1": "Robbert",
-        "blue_player2": "Ivana",
-        "result": "blue",
-        "date": "2024-06-11",
-        "timestamp": "2024-06-11 00:00:00"
+        "red_player1": "Ivana",
+        "red_player2": "Anne",
+        "blue_player1": "Tjeerd",
+        "blue_player2": "Willeke",
+        "blue_goals": "10",
+        "red_goals": "6",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Esther",
+        "red_player2": "Manon",
+        "blue_player1": "Rosa",
+        "blue_player2": "Niels",
+        "blue_goals": "2",
+        "red_goals": "10",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Esther",
+        "red_player2": "Manon",
+        "blue_player1": "Rosa",
+        "blue_player2": "Niels",
+        "blue_goals": "6",
+        "red_goals": "10",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Liv",
+        "red_player2": "Marlijn",
+        "blue_player1": "Jasper",
+        "blue_player2": "Martijn",
+        "blue_goals": "10",
+        "red_goals": "5",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Liv",
+        "red_player2": "Marlijn",
+        "blue_player1": "Jasper",
+        "blue_player2": "Martijn",
+        "blue_goals": "10",
+        "red_goals": "3",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Ruben",
+        "red_player2": "Jan",
+        "blue_player1": "Tjeerd",
+        "blue_player2": "Willeke",
+        "blue_goals": "8",
+        "red_goals": "10",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Ruben",
+        "red_player2": "Jan",
+        "blue_player1": "Tjeerd",
+        "blue_player2": "Willeke",
+        "blue_goals": "10",
+        "red_goals": "4",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Esther",
+        "red_player2": "Manon",
+        "blue_player1": "Jasper",
+        "blue_player2": "Martijn",
+        "blue_goals": "10",
+        "red_goals": "6",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Esther",
+        "red_player2": "Manon",
+        "blue_player1": "Jasper",
+        "blue_player2": "Martijn",
+        "blue_goals": "5",
+        "red_goals": "10",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Ivana",
+        "red_player2": "Anne",
+        "blue_player1": "Robin",
+        "blue_player2": "Tom",
+        "blue_goals": "10",
+        "red_goals": "5",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Niels",
+        "red_player2": "Rosa",
+        "blue_player1": "Liv",
+        "blue_player2": "Marlijn",
+        "blue_goals": "10",
+        "red_goals": "5",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Niels",
+        "red_player2": "Rosa",
+        "blue_player1": "Liv",
+        "blue_player2": "Marlijn",
+        "blue_goals": "6",
+        "red_goals": "10",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Robin",
+        "red_player2": "Tom",
+        "blue_player1": "Liv",
+        "blue_player2": "Marlijn",
+        "blue_goals": "5",
+        "red_goals": "10",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Robin",
+        "red_player2": "Tom",
+        "blue_player1": "Liv",
+        "blue_player2": "Marlijn",
+        "blue_goals": "8",
+        "red_goals": "10",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Tjeerd",
+        "red_player2": "Willeke",
+        "blue_player1": "Esther",
+        "blue_player2": "Manon",
+        "blue_goals": "10",
+        "red_goals": "9",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
+    },
+    {
+        "red_player1": "Tjeerd",
+        "red_player2": "Willeke",
+        "blue_player1": "Esther",
+        "blue_player2": "Manon",
+        "blue_goals": "10",
+        "red_goals": "6",
+        "date": "2024-06-14",
+        "timestamp": "2024-06-14 00:00:00"
     }
 ]

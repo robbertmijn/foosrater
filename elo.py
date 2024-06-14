@@ -5,7 +5,7 @@ DATA_FOLDER = 'data'
 GAMES_FILE = os.path.join(DATA_FOLDER, 'games.json')
 PLAYERS_FILE = os.path.join(DATA_FOLDER, 'players.json')
 
-K_FACTOR = 32
+K_FACTOR = 64
 
 def load_data(file_path):
     if os.path.exists(file_path):
@@ -33,10 +33,12 @@ def update_elo_ratings():
         red_team_elo = (player_dict[game['red_player1']]['elo'] + player_dict[game['red_player2']]['elo']) / 2
         blue_team_elo = (player_dict[game['blue_player1']]['elo'] + player_dict[game['blue_player2']]['elo']) / 2
 
-        if game['result'] == 'red':
-            red_result, blue_result = 1, 0
-        else:
-            red_result, blue_result = 0, 1
+        red_result = int(game['red_goals']) / (int(game['blue_goals']) + int(game['red_goals']))
+        blue_result = int(game['blue_goals']) / (int(game['blue_goals']) + int(game['red_goals']))
+        # if game['result'] == 'red':
+        #     red_result, blue_result = 1, 0
+        # else:
+        #     red_result, blue_result = 0, 1
 
         red_elo_change = calculate_elo_change(red_team_elo, blue_team_elo, red_result)
         blue_elo_change = calculate_elo_change(blue_team_elo, red_team_elo, blue_result)

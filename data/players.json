@@ -1,26 +1,66 @@
 [
     {
-        "name": "Liv",
-        "elo": 999.0
-    },
-    {
-        "name": "Birgit",
-        "elo": 999.0
-    },
-    {
         "name": "Ivana",
-        "elo": 1017.0
+        "elo": 969.0
     },
     {
-        "name": "Robbert",
-        "elo": 1017.0
+        "name": "Anne",
+        "elo": 969.0
     },
     {
-        "name": "Tjalling",
-        "elo": 984.0
+        "name": "Tjeerd",
+        "elo": 1019.0
     },
     {
-        "name": "Puck",
-        "elo": 984.0
+        "name": "Willeke",
+        "elo": 1019.0
+    },
+    {
+        "name": "Esther",
+        "elo": 1039.0
+    },
+    {
+        "name": "Manon",
+        "elo": 1039.0
+    },
+    {
+        "name": "Rosa",
+        "elo": 974.0
+    },
+    {
+        "name": "Niels",
+        "elo": 974.0
+    },
+    {
+        "name": "Liv",
+        "elo": 968.0
+    },
+    {
+        "name": "Marlijn",
+        "elo": 968.0
+    },
+    {
+        "name": "Jasper",
+        "elo": 1022.0
+    },
+    {
+        "name": "Martijn",
+        "elo": 1022.0
+    },
+    {
+        "name": "Ruben",
+        "elo": 993.0
+    },
+    {
+        "name": "Jan",
+        "elo": 993.0
+    },
+    {
+        "name": "Robin",
+        "elo": 1016.0
+    },
+    {
+        "name": "Tom",
+        "elo": 1016.0
     }
 ]

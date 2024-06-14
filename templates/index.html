@@ -24,13 +24,13 @@
                 <ul class="list-group">
                     {% for game in games %}
                         <li class="list-group-item">
-                            {{ game.date }} <span class="badge bg-danger">{{ game.red_player1 }} & {{ game.red_player2 }}</span> vs <span class="badge badge-primary">{{ game.blue_player1 }} & {{ game.blue_player2 }}</span> Winner: {{ game.result }}
+                            {{ game.date }} <span class="badge bg-danger">{{ game.red_player1 }} & {{ game.red_player2 }}</span> vs <span class="badge badge-primary">{{ game.blue_player1 }} & {{ game.blue_player2 }}</span> - {{ game.red_goals }} - {{ game.blue_goals }}
                             <div class="float-right">
                                 <form action="{{ url_for('edit_game', game_id=loop.index0) }}" method="GET" class="d-inline">
-                                    <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                                    <button type="submit" class="btn btn-light btn-sm">&#x270E</button>
                                 </form>
                                 <form action="{{ url_for('delete_game', game_id=loop.index0) }}" method="POST" class="d-inline">
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    <button type="submit" class="btn btn-light btn-sm">&#128465</button>
                                 </form>
                             </div>
                         </li>

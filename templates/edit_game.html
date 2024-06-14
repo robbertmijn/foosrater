@@ -10,28 +10,43 @@
     <div class="container mt-5">
         <h2>Edit Game</h2>
         <form method="POST">
-            <div class="form-group">
-                <label for="red_player1">Red Player 1:</label>
-                <input type="text" id="red_player1" name="red_player1" class="form-control" value="{{ game.red_player1 }}" required>
+            <label for="red-team" class="form-label">Red Team:</label>
+            <div class="input-group mb-3">
+                <select class="form-select" aria-label="Default select example"  id="red_goals" name="red_goals" value="{{ game.red_goals }}">
+                    <option selected>{{ game.red_goals }}</option>
+                    <option value="1">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                  </select>
+                  <input type="text" id="red_player1" name="red_player1" class="form-control"required placeholder="Player 1" aria-label="Player 1" value="{{ game.red_player1 }}">
+                  <input type="text" id="red_player2" name="red_player2" class="form-control" required placeholder="Player 2" aria-label="Player 2" value="{{ game.red_player2 }}">
             </div>
-            <div class="form-group">
-                <label for="red_player2">Red Player 2:</label>
-                <input type="text" id="red_player2" name="red_player2" class="form-control" value="{{ game.red_player2 }}" required>
-            </div>
-            <div class="form-group">
-                <label for="blue_player1">Blue Player 1:</label>
-                <input type="text" id="blue_player1" name="blue_player1" class="form-control" value="{{ game.blue_player1 }}" required>
-            </div>
-            <div class="form-group">
-                <label for="blue_player2">Blue Player 2:</label>
-                <input type="text" id="blue_player2" name="blue_player2" class="form-control" value="{{ game.blue_player2 }}" required>
-            </div>
-            <div class="form-group">
-                <label for="result">Result:</label>
-                <select id="result" name="result" class="form-control" required>
-                    <option value="red" {% if game.result == 'red' %}selected{% endif %}>Red Team Wins</option>
-                    <option value="blue" {% if game.result == 'blue' %}selected{% endif %}>Blue Team Wins</option>
-                </select>
+            <label for="blue-team" class="form-label">Blue Team:</label>
+            <div class="input-group mb-3">
+                <select class="form-select" aria-label="Default select example"  id="blue_goals" name="blue_goals" value="{{ game.blue_goals }}">
+                    <option selected>{{ game.blue_goals }}</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                  </select>
+                  <input type="text" id="blue_player1" name="blue_player1" class="form-control"required placeholder="Player 1" aria-label="Player 1" value="{{ game.blue_player1 }}">
+                  <input type="text" id="blue_player2" name="blue_player2" class="form-control" required placeholder="Player 2" aria-label="Player 2" value="{{ game.blue_player2 }}">
             </div>
             <div class="form-group">
                 <label for="date">Date:</label>
