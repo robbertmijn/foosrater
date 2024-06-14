@@ -26,7 +26,7 @@ def add_new_players(game):
     new_players = []
 
     for player in [game['red_player1'], game['red_player2'], game['blue_player1'], game['blue_player2']]:
-        if player not in player_names:
+        if player not in player_names and player != "":
             new_players.append({'name': player, 'elo': 1000})
             player_names.add(player)
     
@@ -39,14 +39,13 @@ def index():
     players = load_data(PLAYERS_FILE)
     players_sorted = sorted(players, key=lambda x: x['elo'], reverse=True)
     games = load_data(GAMES_FILE)
-    games = reversed(games)
+    # games = reversed(games) #TODO game IDs fixen
     return render_template('index.html', players=players_sorted, games=games)
 
 @app.route('/add_game', methods=['GET', 'POST'])
 def add_game():
     if request.method == 'POST':
         game_date = request.form['date']
-        game_timestamp = datetime.strptime(game_date, '%Y-%m-%d').strftime('%Y-%m-%d %H:%M:%S')
         
         game = {
             'red_player1': request.form['red_player1'],
@@ -55,8 +54,7 @@ def add_game():
             'blue_player2': request.form['blue_player2'],
             'blue_goals': request.form['blue_goals'],
             'red_goals': request.form['red_goals'],
-            'date': game_date,
-            'timestamp': game_timestamp
+            'date': game_date
         }
         games = load_data(GAMES_FILE)
         games.append(game)
@@ -71,7 +69,7 @@ def edit_game(game_id):
     games = load_data(GAMES_FILE)
     game = games[game_id]
     if request.method == 'POST':
-        game_date = request.form['date']
+        # game_date = request.form['date']
 
         game['red_player1'] = request.form['red_player1']
         game['red_player2'] = request.form['red_player2']
@@ -79,7 +77,7 @@ def edit_game(game_id):
         game['blue_player2'] = request.form['blue_player2']
         game['blue_goals'] = request.form['blue_goals']
         game['red_goals'] = request.form['red_goals']
-        game['date'] = game_date
+        game['date'] = request.form['date']
 
         save_data(games, GAMES_FILE)
         add_new_players(game)

@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h3>Players</h3>
                 <ul class="list-group">
                     {% for player in players %}
@@ -19,12 +19,25 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <h3>Games</h3>
+                <a href="{{ url_for('add_game') }}" class="btn btn-primary mt-3">Add New Game</a>
                 <ul class="list-group">
                     {% for game in games %}
+                        {% if game.red_player2 != "" %}
+                            {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ") " ~ " & " ~ game.red_player2 ~ " (" ~ game.red_player2_elo ~ ") " %}
+                        {% else %}
+                            {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ")"%}
+                        {% endif %}
+
+                        {% if game.blue_player2 != "" %}
+                            {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ") " ~ " & " ~ game.blue_player2 ~ " (" ~ game.blue_player2_elo ~ ") " %}
+                        {% else %}
+                            {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ")"%}
+                        {% endif %}
                         <li class="list-group-item">
-                            {{ game.date }} <span class="badge bg-danger">{{ game.red_player1 }} & {{ game.red_player2 }}</span> vs <span class="badge badge-primary">{{ game.blue_player1 }} & {{ game.blue_player2 }}</span> - {{ game.red_goals }} - {{ game.blue_goals }}
+                            {{ game.date }} <span class="badge bg-danger">{{ red_team }}</span> vs <span class="badge badge-primary">{{ blue_team }}</span> - {{ game.red_goals }} - {{ game.blue_goals }}
+
                             <div class="float-right">
                                 <form action="{{ url_for('edit_game', game_id=loop.index0) }}" method="GET" class="d-inline">
                                     <button type="submit" class="btn btn-light btn-sm">&#x270E</button>
@@ -36,7 +49,6 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <a href="{{ url_for('add_game') }}" class="btn btn-primary mt-3">Add New Game</a>
             </div>
         </div>
     </div>

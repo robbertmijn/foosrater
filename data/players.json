@@ -57,10 +57,18 @@
     },
     {
         "name": "Robin",
-        "elo": 1016.0
+        "elo": 1019.0
     },
     {
         "name": "Tom",
         "elo": 1016.0
+    },
+    {
+        "name": "Robbert",
+        "elo": 983.0
+    },
+    {
+        "name": "Sophie",
+        "elo": 1014.0
     }
 ]

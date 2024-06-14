@@ -30,22 +30,33 @@ def update_elo_ratings():
         player['elo'] = 1000  # Reset ELO to base value
 
     for game in games:
-        red_team_elo = (player_dict[game['red_player1']]['elo'] + player_dict[game['red_player2']]['elo']) / 2
-        blue_team_elo = (player_dict[game['blue_player1']]['elo'] + player_dict[game['blue_player2']]['elo']) / 2
+        print(game)
+        # Calculate mean elo for the teams
+        red_team_elo = (player_dict[game['red_player1']]['elo'] + player_dict[game['red_player2']]['elo']) / 2 if game['red_player2'] != "" else player_dict[game['red_player1']]['elo']
+        blue_team_elo = (player_dict[game['blue_player1']]['elo'] + player_dict[game['blue_player2']]['elo']) / 2 if game['blue_player2'] != "" else player_dict[game['blue_player1']]['elo']
 
+        # Calculate the result of the game (scored goals/total goals)
         red_result = int(game['red_goals']) / (int(game['blue_goals']) + int(game['red_goals']))
         blue_result = int(game['blue_goals']) / (int(game['blue_goals']) + int(game['red_goals']))
-        # if game['result'] == 'red':
-        #     red_result, blue_result = 1, 0
-        # else:
-        #     red_result, blue_result = 0, 1
 
+        # Calculate elo change for the teammembers
         red_elo_change = calculate_elo_change(red_team_elo, blue_team_elo, red_result)
         blue_elo_change = calculate_elo_change(blue_team_elo, red_team_elo, blue_result)
 
+        # edit player and game database
         player_dict[game['red_player1']]['elo'] += round(red_elo_change, 0)
-        player_dict[game['red_player2']]['elo'] += round(red_elo_change, 0)
+        game['red_player1_elo'] = player_dict[game['red_player1']]['elo']
+
         player_dict[game['blue_player1']]['elo'] += round(blue_elo_change, 0)
-        player_dict[game['blue_player2']]['elo'] += round(blue_elo_change, 0)
+        game['blue_player1_elo'] = player_dict[game['blue_player1']]['elo']
+
+        # in case of 2v1 or 2v2
+        if game['red_player2'] != "":
+            player_dict[game['red_player2']]['elo'] += round(red_elo_change, 0) 
+            game['red_player2_elo'] = player_dict[game['red_player2']]['elo']
+        if game['blue_player2'] != "":
+            player_dict[game['blue_player2']]['elo'] += round(blue_elo_change, 0)
+            game['blue_player2_elo'] = player_dict[game['blue_player2']]['elo']
 
     save_data(list(player_dict.values()), PLAYERS_FILE)
+    save_data(games, GAMES_FILE)

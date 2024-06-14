@@ -6,8 +6,11 @@
         "blue_player2": "Willeke",
         "blue_goals": "10",
         "red_goals": "3",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 983.0,
+        "blue_player1_elo": 1017.0,
+        "red_player2_elo": 983.0,
+        "blue_player2_elo": 1017.0
     },
     {
         "red_player1": "Ivana",
@@ -16,8 +19,11 @@
         "blue_player2": "Willeke",
         "blue_goals": "10",
         "red_goals": "6",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 978.0,
+        "blue_player1_elo": 1022.0,
+        "red_player2_elo": 978.0,
+        "blue_player2_elo": 1022.0
     },
     {
         "red_player1": "Esther",
@@ -26,8 +32,11 @@
         "blue_player2": "Niels",
         "blue_goals": "2",
         "red_goals": "10",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 1021.0,
+        "blue_player1_elo": 979.0,
+        "red_player2_elo": 1021.0,
+        "blue_player2_elo": 979.0
     },
     {
         "red_player1": "Esther",
@@ -36,8 +45,11 @@
         "blue_player2": "Niels",
         "blue_goals": "6",
         "red_goals": "10",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 1025.0,
+        "blue_player1_elo": 975.0,
+        "red_player2_elo": 1025.0,
+        "blue_player2_elo": 975.0
     },
     {
         "red_player1": "Liv",
@@ -46,8 +58,11 @@
         "blue_player2": "Martijn",
         "blue_goals": "10",
         "red_goals": "5",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 989.0,
+        "blue_player1_elo": 1011.0,
+        "red_player2_elo": 989.0,
+        "blue_player2_elo": 1011.0
     },
     {
         "red_player1": "Liv",
@@ -56,8 +71,11 @@
         "blue_player2": "Martijn",
         "blue_goals": "10",
         "red_goals": "3",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 974.0,
+        "blue_player1_elo": 1026.0,
+        "red_player2_elo": 974.0,
+        "blue_player2_elo": 1026.0
     },
     {
         "red_player1": "Ruben",
@@ -66,8 +84,11 @@
         "blue_player2": "Willeke",
         "blue_goals": "8",
         "red_goals": "10",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 1006.0,
+        "blue_player1_elo": 1016.0,
+        "red_player2_elo": 1006.0,
+        "blue_player2_elo": 1016.0
     },
     {
         "red_player1": "Ruben",
@@ -76,8 +97,11 @@
         "blue_player2": "Willeke",
         "blue_goals": "10",
         "red_goals": "4",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 993.0,
+        "blue_player1_elo": 1029.0,
+        "red_player2_elo": 993.0,
+        "blue_player2_elo": 1029.0
     },
     {
         "red_player1": "Esther",
@@ -86,8 +110,11 @@
         "blue_player2": "Martijn",
         "blue_goals": "10",
         "red_goals": "6",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 1017.0,
+        "blue_player1_elo": 1034.0,
+        "red_player2_elo": 1017.0,
+        "blue_player2_elo": 1034.0
     },
     {
         "red_player1": "Esther",
@@ -96,8 +123,11 @@
         "blue_player2": "Martijn",
         "blue_goals": "5",
         "red_goals": "10",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 1029.0,
+        "blue_player1_elo": 1022.0,
+        "red_player2_elo": 1029.0,
+        "blue_player2_elo": 1022.0
     },
     {
         "red_player1": "Ivana",
@@ -106,8 +136,11 @@
         "blue_player2": "Tom",
         "blue_goals": "10",
         "red_goals": "5",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 969.0,
+        "blue_player1_elo": 1009.0,
+        "red_player2_elo": 969.0,
+        "blue_player2_elo": 1009.0
     },
     {
         "red_player1": "Niels",
@@ -116,8 +149,11 @@
         "blue_player2": "Marlijn",
         "blue_goals": "10",
         "red_goals": "5",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 964.0,
+        "blue_player1_elo": 985.0,
+        "red_player2_elo": 964.0,
+        "blue_player2_elo": 985.0
     },
     {
         "red_player1": "Niels",
@@ -126,8 +162,11 @@
         "blue_player2": "Marlijn",
         "blue_goals": "6",
         "red_goals": "10",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 974.0,
+        "blue_player1_elo": 975.0,
+        "red_player2_elo": 974.0,
+        "blue_player2_elo": 975.0
     },
     {
         "red_player1": "Robin",
@@ -136,8 +175,11 @@
         "blue_player2": "Marlijn",
         "blue_goals": "5",
         "red_goals": "10",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 1017.0,
+        "blue_player1_elo": 967.0,
+        "red_player2_elo": 1017.0,
+        "blue_player2_elo": 967.0
     },
     {
         "red_player1": "Robin",
@@ -146,8 +188,11 @@
         "blue_player2": "Marlijn",
         "blue_goals": "8",
         "red_goals": "10",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 1016.0,
+        "blue_player1_elo": 968.0,
+        "red_player2_elo": 1016.0,
+        "blue_player2_elo": 968.0
     },
     {
         "red_player1": "Tjeerd",
@@ -156,8 +201,11 @@
         "blue_player2": "Manon",
         "blue_goals": "10",
         "red_goals": "9",
-        "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "date": "2023-06-14",
+        "red_player1_elo": 1027.0,
+        "blue_player1_elo": 1031.0,
+        "red_player2_elo": 1027.0,
+        "blue_player2_elo": 1031.0
     },
     {
         "red_player1": "Tjeerd",
@@ -166,7 +214,32 @@
         "blue_player2": "Manon",
         "blue_goals": "10",
         "red_goals": "6",
+        "date": "2023-06-14",
+        "red_player1_elo": 1019.0,
+        "blue_player1_elo": 1039.0,
+        "red_player2_elo": 1019.0,
+        "blue_player2_elo": 1039.0
+    },
+    {
+        "red_player1": "Sophie",
+        "red_player2": "",
+        "blue_player1": "Robbert",
+        "blue_player2": "",
+        "blue_goals": "4",
+        "red_goals": "10",
+        "date": "2024-06-13",
+        "red_player1_elo": 1014.0,
+        "blue_player1_elo": 986.0
+    },
+    {
+        "red_player1": "Robin",
+        "red_player2": "",
+        "blue_player1": "Robbert",
+        "blue_player2": "",
+        "blue_goals": "7",
+        "red_goals": "10",
         "date": "2024-06-14",
-        "timestamp": "2024-06-14 00:00:00"
+        "red_player1_elo": 1019.0,
+        "blue_player1_elo": 983.0
     }
 ]
