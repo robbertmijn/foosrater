@@ -45,18 +45,18 @@ def update_elo_ratings():
 
         # edit player and game database
         player_dict[game['red_player1']]['elo'] += round(red_elo_change, 0)
-        game['red_player1_elo'] = player_dict[game['red_player1']]['elo']
+        game['red_player1_elo'] = round(red_elo_change, 0)
 
         player_dict[game['blue_player1']]['elo'] += round(blue_elo_change, 0)
-        game['blue_player1_elo'] = player_dict[game['blue_player1']]['elo']
+        game['blue_player1_elo'] = round(blue_elo_change, 0) 
 
         # in case of 2v1 or 2v2
         if game['red_player2'] != "":
             player_dict[game['red_player2']]['elo'] += round(red_elo_change, 0) 
-            game['red_player2_elo'] = player_dict[game['red_player2']]['elo']
+            game['red_player2_elo'] = red_elo_change
         if game['blue_player2'] != "":
             player_dict[game['blue_player2']]['elo'] += round(blue_elo_change, 0)
-            game['blue_player2_elo'] = player_dict[game['blue_player2']]['elo']
+            game['blue_player2_elo'] = blue_elo_change
 
     save_data(list(player_dict.values()), PLAYERS_FILE)
     save_data(games, GAMES_FILE)

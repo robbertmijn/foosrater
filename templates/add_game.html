@@ -2,14 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Game</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .container-fluid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>Add Game</h2>
-        <form method="POST" id="foosform">
+    <div class="container-fluid">
+        <div class="form-container">
+
+            <form method="POST" id="foosform">
+            <h2 class="mb-4 text-center">Add Game</h2>
             <label for="red-team" class="form-label">Red Team:</label>
             <div class="input-group mb-3">
                 <select class="form-select" aria-label="Default select example" id="red_goals" name="red_goals">
@@ -45,14 +64,15 @@
                   </select>
                   <input type="text" id="blue_player1" name="blue_player1" class="form-control" required placeholder="Player 1" aria-label="Player 1">
                   <input type="text" id="blue_player2" name="blue_player2" class="form-control" placeholder="Player 2" aria-label="Player 2">
-            </div>
+                </div>
             <div class="form-group">
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" class="form-control" required>
             </div>
             <div id="error-message" class="text-danger mb-3" style="display: none;">At least one goal must be made!</div>
-            <button type="submit" class="btn btn-primary">Add Game</button>
+            <button type="submit" class="btn btn-primary w-100">Add Game</button>
         </form>
+    </div>
     </div>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
