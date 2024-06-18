@@ -22,13 +22,17 @@ def calculate_elo_change(player_elo, opponent_elo, result):
     return K_FACTOR * (result - expected_score)
 
 def update_elo_ratings():
+
+    # Load names of previous players
     players = load_data(PLAYERS_FILE)
     games = load_data(GAMES_FILE)
-    player_dict = {player['name']: player for player in players}
 
+    # Create fresh dict with all players reset to base elo
+    player_dict = {player['name']: player for player in players}
     for player in player_dict.values():
         player['elo'] = 1000  # Reset ELO to base value
 
+    # loop over all games and calculate ratings
     for game in games:
         print(game)
         # Calculate mean elo for the teams
@@ -44,19 +48,25 @@ def update_elo_ratings():
         blue_elo_change = calculate_elo_change(blue_team_elo, red_team_elo, blue_result)
 
         # edit player and game database
-        player_dict[game['red_player1']]['elo'] += round(red_elo_change, 0)
-        game['red_player1_elo'] = round(red_elo_change, 0)
+        player_dict[game['red_player1']]['elo'] += int(red_elo_change)
+        game['red_player1_elo'] = int(red_elo_change)
 
-        player_dict[game['blue_player1']]['elo'] += round(blue_elo_change, 0)
-        game['blue_player1_elo'] = round(blue_elo_change, 0) 
+        player_dict[game['blue_player1']]['elo'] += int(blue_elo_change)
+        game['blue_player1_elo'] = int(blue_elo_change)
 
         # in case of 2v1 or 2v2
         if game['red_player2'] != "":
-            player_dict[game['red_player2']]['elo'] += round(red_elo_change, 0) 
-            game['red_player2_elo'] = red_elo_change
+            player_dict[game['red_player2']]['elo'] += int(red_elo_change)
+            game['red_player2_elo'] = int(red_elo_change)
         if game['blue_player2'] != "":
-            player_dict[game['blue_player2']]['elo'] += round(blue_elo_change, 0)
-            game['blue_player2_elo'] = blue_elo_change
+            player_dict[game['blue_player2']]['elo'] += int(blue_elo_change)
+            game['blue_player2_elo'] = int(blue_elo_change)
 
-    save_data(list(player_dict.values()), PLAYERS_FILE)
+    # overwrite previous players dict with newly sorted dict
+    players = list(player_dict.values())
+    players = sorted(players, key=lambda x: x['elo'], reverse=True)
+    for i, player in enumerate(players):
+        player["ranking"] = i + 1
+
+    save_data(players, PLAYERS_FILE)
     save_data(games, GAMES_FILE)

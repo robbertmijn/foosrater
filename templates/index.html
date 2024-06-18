@@ -14,14 +14,14 @@
                 <ul class="list-group">
                     {% for player in players %}
                         <li class="list-group-item d-flex">
-                            {{ player.name }} ({{ player.elo }})
+                            {{ player.ranking }}. {{ player.name }} ({{ player.elo }})
                         </li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="col-md-8">
                 <h3>Games</h3>
-                <a href="{{ url_for('add_game') }}" class="btn btn-primary mt-3">Add New Game</a>
+                <a href="{{ url_for('add_game') }}" class="btn btn-primary mt-3 w-100">Add Result</a>
                 <ul class="list-group">
                     {% for game in games %}
                         {% if game.red_player2 != "" %}
