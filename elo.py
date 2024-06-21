@@ -34,7 +34,7 @@ def update_elo_ratings():
 
     # loop over all games and calculate ratings
     for game in games:
-        print(game)
+
         # Calculate mean elo for the teams
         red_team_elo = (player_dict[game['red_player1']]['elo'] + player_dict[game['red_player2']]['elo']) / 2 if game['red_player2'] != "" else player_dict[game['red_player1']]['elo']
         blue_team_elo = (player_dict[game['blue_player1']]['elo'] + player_dict[game['blue_player2']]['elo']) / 2 if game['blue_player2'] != "" else player_dict[game['blue_player1']]['elo']

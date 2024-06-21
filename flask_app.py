@@ -16,9 +16,11 @@ def load_data(file_path):
             return json.load(f)
     return []
 
+
 def save_data(data, file_path):
     with open(file_path, 'w') as f:
         json.dump(data, f, indent=4)
+
 
 def add_new_players(game):
     players = load_data(PLAYERS_FILE)
@@ -34,6 +36,7 @@ def add_new_players(game):
         players.extend(new_players)
         save_data(players, PLAYERS_FILE)
 
+
 @app.route('/')
 def index():
     players = load_data(PLAYERS_FILE)
@@ -42,46 +45,43 @@ def index():
     # games = reversed(games) #TODO game IDs fixen
     return render_template('index.html', players=players, games=games)
 
-@app.route('/add_game', methods=['GET', 'POST'])
-def add_game():
-    if request.method == 'POST':
-        
-        game = {
-            'red_player1': request.form['red_player1'],
-            'red_player2': request.form['red_player2'],
-            'blue_player1': request.form['blue_player1'],
-            'blue_player2': request.form['blue_player2'],
-            'blue_goals': request.form['blue_goals'],
-            'red_goals': request.form['red_goals'],
-            'date': request.form['date']
-        }
-        games = load_data(GAMES_FILE)
-        games.append(game)
-        save_data(games, GAMES_FILE)
-        add_new_players(game)
-        update_elo_ratings()
-        return redirect(url_for('index'))
-    return render_template('add_game.html')
 
-@app.route('/edit_game/<int:game_id>', methods=['GET', 'POST'])
+@app.route('/edit_game/<string:game_id>', methods=['GET', 'POST'])
 def edit_game(game_id):
-    games = load_data(GAMES_FILE)
-    game = games[game_id]
-    if request.method == 'POST':
 
-        game['red_player1'] = request.form['red_player1']
-        game['red_player2'] = request.form['red_player2']
-        game['blue_player1'] = request.form['blue_player1']
-        game['blue_player2'] = request.form['blue_player2']
-        game['blue_goals'] = request.form['blue_goals']
-        game['red_goals'] = request.form['red_goals']
-        game['date'] = request.form['date']
+    games = load_data(GAMES_FILE)
+    if isinstance(game_id, int):
+        game = games[game_id] 
+    else:
+        game = {'blue_goals': 10, 'red_goals': 10}
+
+    if request.method == 'POST':
+        if game_id != "new":
+            game['red_player1'] = request.form['red_player1']
+            game['red_player2'] = request.form['red_player2']
+            game['blue_player1'] = request.form['blue_player1']
+            game['blue_player2'] = request.form['blue_player2']
+            game['blue_goals'] = request.form['blue_goals']
+            game['red_goals'] = request.form['red_goals']
+            game['date'] = request.form['date']
+        else:
+            game = {
+                'red_player1': request.form['red_player1'],
+                'red_player2': request.form['red_player2'],
+                'blue_player1': request.form['blue_player1'],
+                'blue_player2': request.form['blue_player2'],
+                'blue_goals': request.form['blue_goals'],
+                'red_goals': request.form['red_goals'],
+                'date': request.form['date']
+                }
+            games.append(game)
 
         save_data(games, GAMES_FILE)
         add_new_players(game)
         update_elo_ratings()
         return redirect(url_for('index'))
     return render_template('edit_game.html', game=game, game_id=game_id)
+
 
 @app.route('/delete_game/<int:game_id>', methods=['POST'])
 def delete_game(game_id):
@@ -90,6 +90,7 @@ def delete_game(game_id):
     save_data(games, GAMES_FILE)
     update_elo_ratings()
     return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
