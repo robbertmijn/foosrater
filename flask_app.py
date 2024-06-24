@@ -39,7 +39,7 @@ def index():
     players = load_data(PLAYERS_FILE)
     games = load_data(GAMES_FILE)
     update_elo_ratings()
-    # games = reversed(games) #TODO game IDs fixen
+    games = reversed(games)
     return render_template('index.html', players=players, games=games)
 
 @app.route('/add_game', methods=['GET', 'POST'])
@@ -66,7 +66,7 @@ def add_game():
 @app.route('/edit_game/<int:game_id>', methods=['GET', 'POST'])
 def edit_game(game_id):
     games = load_data(GAMES_FILE)
-    game = games[game_id]
+    game = games[-(game_id+1)]
     if request.method == 'POST':
 
         game['red_player1'] = request.form['red_player1']
