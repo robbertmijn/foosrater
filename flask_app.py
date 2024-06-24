@@ -35,11 +35,28 @@ def add_new_players(game):
         save_data(players, PLAYERS_FILE)
 
 @app.route('/')
-def index():
+def index(methods=['GET', 'POST']):
     players = load_data(PLAYERS_FILE)
     games = load_data(GAMES_FILE)
     update_elo_ratings()
     games = reversed(games)
+    if request.method == 'POST':
+        
+        game = {
+            'red_player1': request.form['red_player1'],
+            'red_player2': request.form['red_player2'],
+            'blue_player1': request.form['blue_player1'],
+            'blue_player2': request.form['blue_player2'],
+            'blue_goals': request.form['blue_goals'],
+            'red_goals': request.form['red_goals'],
+            'date': request.form['date']
+        }
+        games = load_data(GAMES_FILE)
+        games.append(game)
+        save_data(games, GAMES_FILE)
+        add_new_players(game)
+        update_elo_ratings()
+        return redirect(url_for('index'))
     return render_template('index.html', players=players, games=games)
 
 @app.route('/add_game', methods=['GET', 'POST'])
