@@ -5,35 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HMT FoosRater</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-        }
-        .container-fluid {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
-        .form-container {
-            width: 100%;
-            max-width: 600px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}">
 </head>
 <body>
     <div class="container-fluid">
-        <div class="row fixed-top bg-dark text-white">
-            <div class="col">
-                <button class="btn btn-dark" data-toggle="modal" data-target="#overlay1">Ranking</button>
-                <button class="btn btn-dark" data-toggle="modal" data-target="#overlay2">Add game</button>
+        <div class="row fixed-top bg-dark text-white d-flex justify-content-center align-items-center" style="height: 60px;">
+            <div class="col-auto">
+                <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay1">Ranking</button>
+                <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay2">Add game</button>
+                <!-- <button class="btn btn-dark" data-toggle="modal" data-target="#overlay3">Add game</button> -->
             </div>
         </div>
-        <div class="main-content" style="margin-top: 50px; height: calc(100% - 50px); display: flex; justify-content: center; align-items: center;">
-            <div class="default-div text-center p-3 border">
+        <!-- <div class="main-content" style="margin-top: 50px; height: calc(100% - 50px); display: flex; justify-content: center; align-items: center;"> -->
+        <div class="main-content">
+            <div class="default-div p-3 border">
+            <!-- <div class="default-div"> -->
                 <h3>Games</h3>
-                <a href="{{ url_for('add_game') }}" class="btn btn-primary mt-3 w-100">Add Result</a>
                 <ul class="list-group">
                     {% for game in games %}
                         {% if game.red_player2 != "" %}
