@@ -9,6 +9,7 @@ app = Flask(__name__)
 DATA_FOLDER = 'data'
 GAMES_FILE = os.path.join(DATA_FOLDER, 'games.json')
 PLAYERS_FILE = os.path.join(DATA_FOLDER, 'players.json')
+__VERSION = 1.1
 
 def load_data(file_path):
     if os.path.exists(file_path):
@@ -61,7 +62,7 @@ def index():
         # return redirect(url_for('index'))
     
     games = reversed(games)
-    return render_template('index.html', players=players, games=games)
+    return render_template('index.html', players=players, games=games, version=str(__VERSION))
 
 
 @app.route('/edit_game/<int:game_id>', methods=['GET', 'POST'])
