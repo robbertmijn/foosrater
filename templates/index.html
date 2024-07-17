@@ -17,39 +17,46 @@
             </div>
         </div>
         <!-- <div class="main-content" style="margin-top: 50px; height: calc(100% - 50px); display: flex; justify-content: center; align-items: center;"> -->
-        <div class="main-content">
-            <div class="default-div p-3 border">
-            <!-- <div class="default-div"> -->
-                <h3>Games</h3>
-                <ul class="list-group">
-                    {% for game in games %}
-                        {% if game.red_player2 != "" %}
-                            {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ") " ~ " & " ~ game.red_player2 ~ " (" ~ game.red_player2_elo ~ ") " %}
-                        {% else %}
-                            {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ")"%}
-                        {% endif %}
+        <!-- <div class="main-content"> -->
+            <!-- <div class="container"> -->
+                <!-- <div class="default-div p-3 border"> -->
+                <div class="default-div">
+                    <h3>Games</h3>
+                    <ul class="list-group">
+                        {% for game in games %}
+                            {% if game.red_player2 != "" %}
+                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ") " ~ " & " ~ game.red_player2 ~ " (" ~ game.red_player2_elo ~ ") " %}
+                            {% else %}
+                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ")"%}
+                            {% endif %}
 
-                        {% if game.blue_player2 != "" %}
-                            {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ") " ~ " & " ~ game.blue_player2 ~ " (" ~ game.blue_player2_elo ~ ") " %}
-                        {% else %}
-                            {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ")"%}
-                        {% endif %}
-                        <li class="list-group-item">
-                            {{ game.date }} <span class="badge bg-danger">{{ red_team }}</span> vs <span class="badge badge-primary">{{ blue_team }}</span> - {{ game.red_goals }} - {{ game.blue_goals }}
+                            {% if game.blue_player2 != "" %}
+                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ") " ~ " & " ~ game.blue_player2 ~ " (" ~ game.blue_player2_elo ~ ") " %}
+                            {% else %}
+                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ")"%}
+                            {% endif %}
+                            <li class="list-group-item">
+                                <div class="float-right">
+                                    {{ game.date }}
+                                    <form action="{{ url_for('edit_game', game_id=loop.index0) }}" method="GET" class="d-inline">
+                                        <button type="submit" class="btn btn-light btn-sm">&#x270E</button>
+                                    </form>
+                                    <form action="{{ url_for('delete_game', game_id=loop.index0) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-light btn-sm">&#128465</button>
+                                    </form>
+                                </div>
+                                <br>
+                                <div class="float-left">
+                                    <span class="badge bg-danger">{{ red_team }}</span> vs <span class="badge badge-primary">{{ blue_team }}</span> - {{ game.red_goals }} - {{ game.blue_goals }}
+                                </div>
+                                
 
-                            <div class="float-right">
-                                <form action="{{ url_for('edit_game', game_id=loop.index0) }}" method="GET" class="d-inline">
-                                    <button type="submit" class="btn btn-light btn-sm">&#x270E</button>
-                                </form>
-                                <form action="{{ url_for('delete_game', game_id=loop.index0) }}" method="POST" class="d-inline">
-                                    <button type="submit" class="btn btn-light btn-sm">&#128465</button>
-                                </form>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            <!-- </div>
+        </div> -->
         version {{ version }}
     </div>
 
