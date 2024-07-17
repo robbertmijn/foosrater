@@ -1,3 +1,4 @@
+
 body, html {
     margin: 0;
     padding: 0;
@@ -13,11 +14,40 @@ body, html {
 }
 
 .default-div {
+    margin-top: 60px; /* height of the top-bar */
     width: 100%;
     text-align: center;
-    padding: 20px;
+    padding: 0px;
     background-color: #fff;
     border: 1px solid #ccc;
     overflow-y: auto; /* Ensures content can scroll */
     max-height: calc(100vh - 60px); /* Adjust max-height to avoid overflowing outside the viewport */
+}
+
+@media (min-width: 576px) {
+    .default-div {
+        max-width: 540px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 768px) {
+    .default-div {
+        max-width: 720px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 992px) {
+    .default-div {
+        max-width: 960px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 1200px) {
+    .default-div {
+        max-width: 1140px;
+        margin: 0 auto;
+    }
 }
