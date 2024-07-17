@@ -3,13 +3,13 @@ from typing import List, Tuple
 
 
 class Player:
-    def __init__(self, name: str, elo: int = 1000, games: list = []):
+    def __init__(self, name: str, elo: int = 1000, games: list = None):
         self.name = name
         self.elo = elo
-        self.games = games
+        self.games = games if games is not None else []
 
     def __repr__(self):
-        return f"Player(name={self.name}, elo={self.elo}, games={len(self.games)})"
+        return f"PLAYER | {self.name}, elo: {self.elo}, games: {len(self.games)}"
 
 
 class Game:
@@ -26,10 +26,10 @@ class Game:
         self.date_time = date_time             
         
     def __repr__(self):
-        return (f"Game(red_team=({self.red_team[0].name}, {self.red_team[1].name}), "
-                f"blue_team=({self.blue_team[0].name}, {self.blue_team[1].name}), "
-                f"red_score={self.red_score}, blue_score={self.blue_score}, "
-                f"date_time={self.date_time})")
+        return (f"GAME | red team: {self.red_team[0].name} & {self.red_team[1].name} vs "
+                f"blue team: {self.blue_team[0].name} & {self.blue_team[1].name} - "
+                f"{self.red_score} - {self.blue_score}, on {self.date_time}"
+                )
 
 
 class League:
@@ -55,10 +55,9 @@ class League:
                     (self.players[blue_team[0]], self.players[blue_team[1]]),
                     red_score, blue_score, date_time)
         
-        for player in [self.players[red_team[0]], 
-                       self.players[red_team[1]], 
-                    self.players[blue_team[0]], 
-                    self.players[blue_team[1]]]:
+        for player in [self.players[red_team[0]],  self.players[red_team[1]], 
+                    self.players[blue_team[0]], self.players[blue_team[1]]]:
+
             player.games.append(game)
             
         self.games.append(game)
@@ -100,27 +99,25 @@ class League:
             game.red_team[1].elo = red_team_elo
             game.blue_team[0].elo = blue_team_elo
             game.blue_team[1].elo = blue_team_elo
+            
+    def __repr__(self):
+        
+        return(f"{self.games}")
 
-# Example Usage
-if __name__ == "__main__":
-    league = League()
-    # p1 = Player("Red Player 1")
-    # p2 = Player("Red Player 2")
-    # p3 = Player("Blue Player 1")
-    # p4 = Player("Blue Player 2")
 
-    # league.add_player(p1)
-    # league.add_player(p2)
-    # league.add_player(p3)
-    # league.add_player(p4)
+league = League()
 
-    league.add_game(("Robbert", "Anne"), ("Manon", "Sjoerd"), 3, 2, datetime.now())
-    league.add_game(("Anne", "Manon"), ("Jasper", "Rob"), 1, 4, datetime.now())
-    
-    for player in league.players.values():
-        print(player)
-    
-    league.edit_game(0, 2, 2)
+league.add_game(("Robbert", "Anne"), ("Manon", "Sjoerd"), 3, 2, datetime.now())
+league.add_game(("Anne", "Manon"), ("Jasper", "Rob"), 1, 4, datetime.now())
 
-    for player in league.players.values():
-        print(player)
+league.games
+league.players
+league
+
+# for player in league.players.values():
+#     print(player)
+
+# league.edit_game(0, 2, 2)
+
+# for player in league.players.values():
+#     print(player)
