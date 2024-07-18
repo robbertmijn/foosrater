@@ -59,7 +59,7 @@ def index():
         save_data(games, GAMES_FILE)
         add_new_players(game)
         update_elo_ratings()
-        # return redirect(url_for('index'))
+        return redirect(url_for('index'))
     
     games = reversed(games)
     return render_template('index.html', players=players, games=games, version=str(__VERSION))
