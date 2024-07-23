@@ -30,7 +30,7 @@ def add_new_players(game):
 
     for player in [game['red_player1'], game['red_player2'], game['blue_player1'], game['blue_player2']]:
         if player not in player_names and player != "":
-            new_players.append({'name': player, 'elo': 1000})
+            new_players.append({'name': player, 'elo': 1000, 'games': 0})
             player_names.add(player)
     
     if new_players:
