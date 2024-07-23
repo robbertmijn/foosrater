@@ -31,6 +31,7 @@ def update_elo_ratings():
     player_dict = {player['name']: player for player in players}
     for player in player_dict.values():
         player['elo'] = 1000  # Reset ELO to base value
+        player['games'] = 0
 
     # loop over all games and calculate ratings
     for game in games:
@@ -49,17 +50,21 @@ def update_elo_ratings():
 
         # edit player and game database
         player_dict[game['red_player1']]['elo'] += int(red_elo_change)
+        player_dict[game['red_player1']]['games'] += 1
         game['red_player1_elo'] = int(red_elo_change)
 
         player_dict[game['blue_player1']]['elo'] += int(blue_elo_change)
+        player_dict[game['blue_player1']]['games'] += 1
         game['blue_player1_elo'] = int(blue_elo_change)
 
         # in case of 2v1 or 2v2
         if game['red_player2'] != "":
             player_dict[game['red_player2']]['elo'] += int(red_elo_change)
+            player_dict[game['red_player2']]['games'] += 1
             game['red_player2_elo'] = int(red_elo_change)
         if game['blue_player2'] != "":
             player_dict[game['blue_player2']]['elo'] += int(blue_elo_change)
+            player_dict[game['blue_player2']]['games'] += 1
             game['blue_player2_elo'] = int(blue_elo_change)
 
     # overwrite previous players dict with newly sorted dict

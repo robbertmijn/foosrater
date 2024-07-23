@@ -134,7 +134,7 @@
                     <ul class="list-group">
                         {% for player in players %}
                             <li class="list-group-item d-flex">
-                                {{ player.ranking }}. {{ player.name }} ({{ player.elo }})
+                                {{ player.ranking }}. {{ player.name }} ({{ player.elo }}, n = {{ player.games }})
                             </li>
                         {% endfor %}
                     </ul>
