@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMT FoosRater</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row fixed-top bg-dark text-white d-flex justify-content-center align-items-center" style="height: 60px;">
+            <div class="col-auto">
+                <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay1">Ranking</button>
+                <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay2">Add game</button>
+                <!-- <button class="btn btn-dark" data-toggle="modal" data-target="#overlay3">Add game</button> -->
+            </div>
+        </div>
+        <!-- <div class="main-content" style="margin-top: 50px; height: calc(100% - 50px); display: flex; justify-content: center; align-items: center;"> -->
+        <!-- <div class="main-content"> -->
+            <!-- <div class="container"> -->
+                <!-- <div class="default-div p-3 border"> -->
+                <div class="default-div">
+                    <h3>Games</h3>
+                    <ul class="list-group">
+                        {% for game in games %}
+                            {% if game.red_player2 != "" %}
+                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ") " ~ " & " ~ game.red_player2 ~ " (" ~ game.red_player2_elo ~ ") " %}
+                            {% else %}
+                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ")"%}
+                            {% endif %}
+
+                            {% if game.blue_player2 != "" %}
+                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ") " ~ " & " ~ game.blue_player2 ~ " (" ~ game.blue_player2_elo ~ ") " %}
+                            {% else %}
+                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ")"%}
+                            {% endif %}
+                            <li class="list-group-item">
+                                <div class="float-right">
+                                    {{ game.date }}
+                                    <form action="{{ url_for('edit_game', game_id=loop.index0) }}" method="GET" class="d-inline">
+                                        <button type="submit" class="btn btn-light btn-sm">&#x270E</button>
+                                    </form>
+                                    <form action="{{ url_for('delete_game', game_id=loop.index0) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-light btn-sm">&#128465</button>
+                                    </form>
+                                </div>
+                                <br>
+                                <div class="float-left">
+                                    <span class="badge bg-danger">{{ red_team }}</span> vs <span class="badge badge-primary">{{ blue_team }}</span> - {{ game.red_goals }} - {{ game.blue_goals }}
+                                </div>
+                                
+
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            <!-- </div>
+        </div> -->
+        version {{ version }}
+    </div>
+
+    <!-- Overlay Modals -->
+    <div class="modal fade" id="overlay2" tabindex="-1" role="dialog" aria-labelledby="overlay2Label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="overlay2Label">Add game</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="foosform">
+                        <label for="red-team" class="form-label">Red Team:</label>
+                        <div class="input-group mb-3">
+                            <select class="form-select" aria-label="Default select example" id="red_goals" name="red_goals">
+                                <option value=0>0</option>
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option value=5>5</option>
+                                <option value=6>6</option>
+                                <option value=7>7</option>
+                                <option value=8>8</option>
+                                <option value=9>9</option>
+                                <option value=10>10</option>
+                              </select>
+                              <input type="text" id="red_player1" name="red_player1" class="form-control" required placeholder="Player 1" aria-label="Player 1">
+                              <input type="text" id="red_player2" name="red_player2" class="form-control" placeholder="Player 2" aria-label="Player 2">
+                        </div>
+                        <label for="blue-team" class="form-label">Blue Team:</label>
+                        <div class="input-group mb-3">
+                            <select class="form-select" aria-label="Default select example" id="blue_goals" name="blue_goals">
+                                <option value=0>0</option>
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option value=5>5</option>
+                                <option value=6>6</option>
+                                <option value=7>7</option>
+                                <option value=8>8</option>
+                                <option value=9>9</option>
+                                <option value=10>10</option>
+                              </select>
+                              <input type="text" id="blue_player1" name="blue_player1" class="form-control" required placeholder="Player 1" aria-label="Player 1">
+                              <input type="text" id="blue_player2" name="blue_player2" class="form-control" placeholder="Player 2" aria-label="Player 2">
+                            </div>
+                        <div class="form-group">
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+                        <div id="error-message" class="text-danger mb-3" style="display: none;">At least one goal must be made!</div>
+                        <button type="submit" class="btn btn-primary w-100">Add Game</button>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="overlay1" tabindex="-1" role="dialog" aria-labelledby="overlay1Label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="overlay1Label">Ranking</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group">
+                        {% for player in players %}
+                            <li class="list-group-item d-flex">
+                                {{ player.ranking }}. {{ player.name }} ({{ player.elo }}, n = {{ player.games }})
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('date').valueAsDate = new Date();
+        document.getElementById('foosform').addEventListener('submit', function(event) {
+            const dropdown1 = parseInt(document.getElementById('blue_goals').value);
+            const dropdown2 = parseInt(document.getElementById('red_goals').value);
+            const sum = dropdown1 + dropdown2;
+
+            if (sum < 1) {
+                event.preventDefault();
+                document.getElementById('error-message').style.display = 'block';
+            } else {
+                document.getElementById('error-message').style.display = 'none';
+            }
+        })
+    </script>
+</body>
+</html>
