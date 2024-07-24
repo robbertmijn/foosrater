@@ -100,12 +100,14 @@ def delete_game(game_id):
 
 @app.route('/stats')
 def stats():
-    data = load_data(GAMES_FILE)
+    games = load_data(GAMES_FILE)
     players_data = {}
     
     # Organize data by player and date
-    for game in data:
+    for game in games:
+        
         date = datetime.strptime(game['date'], "%Y-%m-%d")
+            
         for player, rating in game['players'].items():
             if player not in players_data:
                 players_data[player] = {'dates': [], 'ratings': []}
@@ -121,6 +123,7 @@ def stats():
     layout = go.Layout(title='Player Ratings Over Time', xaxis={'title': 'Date'}, yaxis={'title': 'Rating'})
     fig = go.Figure(data=traces, layout=layout)
     graph = pio.to_html(fig, full_html=False)
+    print(graph)
     
     return render_template('stats.html', graph=graph)
 
