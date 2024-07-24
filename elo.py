@@ -36,6 +36,8 @@ def update_elo_ratings():
     # loop over all games and calculate ratings
     for game in games:
 
+        game['players'] = {}
+        
         # Calculate mean elo for the teams
         red_team_elo = (player_dict[game['red_player1']]['elo'] + player_dict[game['red_player2']]['elo']) / 2 if game['red_player2'] != "" else player_dict[game['red_player1']]['elo']
         blue_team_elo = (player_dict[game['blue_player1']]['elo'] + player_dict[game['blue_player2']]['elo']) / 2 if game['blue_player2'] != "" else player_dict[game['blue_player1']]['elo']
@@ -53,10 +55,12 @@ def update_elo_ratings():
         player_dict[game['red_player1']]['games'] += 1
         game['red_player1_elo_change'] = int(red_elo_change)
         game['red_player1_elo'] = player_dict[game['red_player1']]['elo']
+        game['players'][game['red_player_1']] = player_dict[game['red_player1']]['elo']
 
         player_dict[game['blue_player1']]['elo'] += int(blue_elo_change)
         player_dict[game['blue_player1']]['games'] += 1
         game['blue_player1_elo_change'] = player_dict[game['blue_player1']]['elo']
+        game['players'][game['blue_player_1']] = player_dict[game['blue_player1']]['elo']
 
         # in case of 2v1 or 2v2
         if game['red_player2'] != "":
@@ -64,12 +68,14 @@ def update_elo_ratings():
             player_dict[game['red_player2']]['games'] += 1
             game['red_player2_elo_change'] = int(red_elo_change)
             game['red_player2_elo'] = player_dict[game['red_player2']]['elo']
+            game['players'][game['red_player_2']] = player_dict[game['red_player2']]['elo']
 
         if game['blue_player2'] != "":
             player_dict[game['blue_player2']]['elo'] += int(blue_elo_change)
             player_dict[game['blue_player2']]['games'] += 1
             game['blue_player2_elo_change'] = int(blue_elo_change)
             game['blue_player2_elo'] = player_dict[game['blue_player2']]['elo']
+            game['players'][game['blue_player_2']] = player_dict[game['blue_player2']]['elo']
 
     # overwrite previous players dict with newly sorted dict
     players = list(player_dict.values())
