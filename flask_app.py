@@ -123,7 +123,6 @@ def stats():
     layout = go.Layout(title='Player Ratings Over Time', xaxis={'title': 'Date'}, yaxis={'title': 'Rating'})
     fig = go.Figure(data=traces, layout=layout)
     graph = pio.to_html(fig, full_html=False)
-    print(graph)
     
     return render_template('stats.html', graph=graph)
 
