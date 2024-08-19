@@ -4,6 +4,9 @@ import os
 from datetime import datetime
 from elo import update_elo_ratings, calculate_elo_change
 
+import plotly.graph_objs as go
+import plotly.io as pio
+
 app = Flask(__name__)
 
 DATA_FOLDER = 'data'
@@ -93,6 +96,35 @@ def delete_game(game_id):
     save_data(games, GAMES_FILE)
     update_elo_ratings()
     return redirect(url_for('index'))
+
+
+@app.route('/stats')
+def stats():
+    games = load_data(GAMES_FILE)
+    players_data = {}
+    
+    # Organize data by player and date
+    for game in games:
+        
+        date = datetime.strptime(game['date'], "%Y-%m-%d")
+            
+        for player, rating in game['players'].items():
+            if player not in players_data:
+                players_data[player] = {'dates': [], 'ratings': []}
+            players_data[player]['dates'].append(date)
+            players_data[player]['ratings'].append(rating)
+    
+    # Create traces for each player
+    traces = []
+    for player, pdata in players_data.items():
+        trace = go.Scatter(x=pdata['dates'], y=pdata['ratings'], mode='lines+markers', name=player)
+        traces.append(trace)
+    
+    layout = go.Layout(title='Player Ratings Over Time', xaxis={'title': 'Date'}, yaxis={'title': 'Rating'})
+    fig = go.Figure(data=traces, layout=layout)
+    graph = pio.to_html(fig, full_html=False)
+    
+    return render_template('stats.html', graph=graph)
 
 
 if __name__ == '__main__':
