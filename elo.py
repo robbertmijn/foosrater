@@ -59,7 +59,8 @@ def update_elo_ratings():
 
         player_dict[game['blue_player1']]['elo'] += int(blue_elo_change)
         player_dict[game['blue_player1']]['games'] += 1
-        game['blue_player1_elo_change'] = player_dict[game['blue_player1']]['elo']
+        game['blue_player1_elo_change'] = int(blue_elo_change)
+        game['blue_player1_elo'] = player_dict[game['blue_player1']]['elo']
         game['players'][game['blue_player1']] = player_dict[game['blue_player1']]['elo']
 
         # in case of 2v1 or 2v2
