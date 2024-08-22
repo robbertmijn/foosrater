@@ -97,15 +97,20 @@ def delete_game(game_id):
     return redirect(url_for('index'))
 
 
-@app.route('/stats')
-def stats():
+@app.route('/social_graph')
+def social_graph():
     
     social_graph = make_social_graph(GAMES_FILE)
+        
+    return render_template('social_graph.html', social_graph=social_graph)
+
+
+@app.route('/player_stats')
+def player_stats():
+    
     player_stats = make_player_stats(GAMES_FILE)
-    
-    print(player_stats)
-    
-    return render_template('stats.html', social_graph=social_graph, player_stats=player_stats)
+        
+    return render_template('player_stats.html', player_stats=player_stats)
 
 
 if __name__ == '__main__':
