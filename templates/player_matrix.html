@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Player Matchups</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <style>
+        table.dataTable tbody td {
+            background-color: #fff;
+        }
+        table.dataTable tbody td.highlight {
+            background-color: #dff0d8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Player Matchups</h1>
+    <table id="matrixTable" class="display">
+        <thead>
+            <tr>
+                <th>Player</th>
+                {% for player in players %}
+                    <th>{{ player }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for player1 in players %}
+            <tr>
+                <td>{{ player1 }} ({{ player_game_counts[player1] if player1 != 'Virtual Player' else 'Virtual' }})</td>
+                {% for player2 in players %}
+                <td class="cell" data-value="{{ matchups[player1][player2] if player2 in matchups[player1] else 0 }}">{{ matchups[player1][player2] if player2 in matchups[player1] else 0 }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#matrixTable').DataTable({
+                "ordering": false,  // Disable DataTable ordering since we sorted manually
+                "paging": false,  // Disable paging
+                "info": false  // Disable table info
+            });
+
+            // Function to apply color gradient based on values
+            function applyColorGrading() {
+                var maxValue = 0;
+                $('.cell').each(function() {
+                    var value = $(this).data('value');
+                    if (value > maxValue) {
+                        maxValue = value;
+                    }
+                });
+                
+                $('.cell').each(function() {
+                    var value = $(this).data('value');
+                    var intensity = value / maxValue * 255;
+                    $(this).css('background-color', 'rgb(' + (255 - intensity) + ',' + (255) + ',' + (255 - intensity) + ')');
+                });
+            }
+
+            // Apply color grading after the table is initialized
+            applyColorGrading();
+        });
+    </script>
+</body>
+</html>
