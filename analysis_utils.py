@@ -5,6 +5,7 @@ import plotly.io as pio
 
 import networkx as nx
 import matplotlib.pyplot as plt
+from collections import defaultdict
 
 from datetime import datetime
 
@@ -141,3 +142,94 @@ def make_player_stats(GAMES_FILE):
     graph = pio.to_html(fig, full_html=False)
     
     return graph
+
+# Function to load JSON and process the data
+def make_player_matrix(GAMES_FILE):
+    with open(GAMES_FILE, 'r') as f:
+        games = json.load(f)
+
+    # Store how many times players have played against each other
+    matchups = defaultdict(lambda: defaultdict(int))
+    player_game_counts = defaultdict(int)
+
+    # Analyze all the matches in the data
+    for game in games:
+        players_red = [game['red_player1'], game.get('red_player2', '')]
+        players_blue = [game['blue_player1'], game.get('blue_player2', '')]
+
+        players_red = [p for p in players_red if p]  # Filter out empty strings
+        players_blue = [p for p in players_blue if p]
+
+        for red_player in players_red:
+            player_game_counts[red_player] += 1
+            for blue_player in players_blue:
+                player_game_counts[blue_player] += 1
+                matchups[red_player][blue_player] += 1
+                matchups[blue_player][red_player] += 1
+
+    # Create the virtual player and exclude players with less than 3 games
+    virtual_player = "Other players"
+    filtered_matchups = defaultdict(lambda: defaultdict(int))
+
+    for player1 in matchups:
+        for player2 in matchups[player1]:
+            if player_game_counts[player1] < 3 or player_game_counts[player2] < 3:
+                filtered_matchups[virtual_player][player1] += matchups[player1][player2]
+                filtered_matchups[player1][virtual_player] += matchups[player1][player2]
+            else:
+                filtered_matchups[player1][player2] += matchups[player1][player2]
+
+    # Keep only players with 3 or more games and the virtual player
+    final_players = [p for p, count in player_game_counts.items() if count >= 3]
+    final_players.append(virtual_player)
+
+    # Sort players by the number of games played
+    final_players_sorted = sorted(final_players, key=lambda p: player_game_counts[p] if p != virtual_player else 0, reverse=True)
+
+    # Create the final matchups for sorted players
+    final_matchups = {p: filtered_matchups[p] for p in final_players_sorted}
+
+    return final_players_sorted, final_matchups, player_game_counts
+
+
+def get_player_profile(GAMES_FILE, player):
+    
+    with open(GAMES_FILE, 'r') as f:
+        games = json.load(f)
+
+    # Store how many times players have played against each other
+    opponents = defaultdict(lambda: defaultdict(int))
+    teammates = defaultdict(lambda: defaultdict(int))
+    player_game_counts = defaultdict(int)
+
+    # Analyze all the matches in the data
+    for game in games:
+        players_red = [game['red_player1'], game.get('red_player2', '')]
+        players_blue = [game['blue_player1'], game.get('blue_player2', '')]
+
+        players_red = [p for p in players_red if p]
+        players_blue = [p for p in players_blue if p]
+        
+        for p in players_red + players_blue:
+            player_game_counts[p] += 1
+        
+        if len(players_red) > 1:
+            teammates[game['red_player1']][game['red_player2']] += 1
+            teammates[game['red_player2']][game['red_player1']] += 1
+        if len(players_blue) > 1:
+            teammates[game['blue_player1']][game['blue_player2']] += 1
+            teammates[game['blue_player2']][game['blue_player1']] += 1
+        
+        for red_player in players_red:
+            for blue_player in players_blue:
+                opponents[red_player][blue_player] += 1
+                
+        for blue_player in players_blue:
+            for red_player in players_red:
+                opponents[blue_player][red_player] += 1
+
+    player_profile = dict(name=player, 
+                          opponents=sorted(opponents[player].items(), key=lambda x: x[1], reverse=True)[:5],
+                          teammates=sorted(teammates[player].items(), key=lambda x: x[1], reverse=True)[:5])
+    
+    return player_profile

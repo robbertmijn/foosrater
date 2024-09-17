@@ -3,7 +3,7 @@ import json
 import os
 from elo import update_elo_ratings, calculate_elo_change
 
-from analysis_utils import make_social_graph, make_player_stats
+from analysis_utils import *
 
 app = Flask(__name__)
 
@@ -111,6 +111,23 @@ def player_stats():
     player_stats = make_player_stats(GAMES_FILE)
         
     return render_template('player_stats.html', player_stats=player_stats)
+
+
+@app.route('/player_matrix')
+def player_matrix():
+    
+    players, matchups, counts = make_player_matrix(GAMES_FILE)
+        
+    return render_template('player_matrix.html', players=players, matchups=matchups, player_game_counts=counts)
+
+
+@app.route('/player/<string:player>')
+def player_profile(player):
+    
+    data = get_player_profile(GAMES_FILE, player)
+    print(data)
+    
+    return jsonify(data)
 
 
 if __name__ == '__main__':
