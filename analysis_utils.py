@@ -190,3 +190,46 @@ def make_player_matrix(GAMES_FILE):
     final_matchups = {p: filtered_matchups[p] for p in final_players_sorted}
 
     return final_players_sorted, final_matchups, player_game_counts
+
+
+def get_player_profile(GAMES_FILE, player):
+    
+    with open(GAMES_FILE, 'r') as f:
+        games = json.load(f)
+
+    # Store how many times players have played against each other
+    opponents = defaultdict(lambda: defaultdict(int))
+    teammates = defaultdict(lambda: defaultdict(int))
+    player_game_counts = defaultdict(int)
+
+    # Analyze all the matches in the data
+    for game in games:
+        players_red = [game['red_player1'], game.get('red_player2', '')]
+        players_blue = [game['blue_player1'], game.get('blue_player2', '')]
+
+        players_red = [p for p in players_red if p]
+        players_blue = [p for p in players_blue if p]
+        
+        for p in players_red + players_blue:
+            player_game_counts[p] += 1
+        
+        if len(players_red) > 1:
+            teammates[game['red_player1']][game['red_player2']] += 1
+            teammates[game['red_player2']][game['red_player1']] += 1
+        if len(players_blue) > 1:
+            teammates[game['blue_player1']][game['blue_player2']] += 1
+            teammates[game['blue_player2']][game['blue_player1']] += 1
+        
+        for red_player in players_red:
+            for blue_player in players_blue:
+                opponents[red_player][blue_player] += 1
+                
+        for blue_player in players_blue:
+            for red_player in players_red:
+                opponents[blue_player][red_player] += 1
+
+    player_profile = dict(name=player, 
+                          opponents=sorted(opponents[player].items(), key=lambda x: x[1], reverse=True)[:5],
+                          teammates=sorted(teammates[player].items(), key=lambda x: x[1], reverse=True)[:5])
+    
+    return player_profile
