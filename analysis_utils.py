@@ -199,6 +199,9 @@ def get_player_profile(GAMES_FILE, player):
 
     # Store how many times players have played against each other
     opponents = defaultdict(lambda: defaultdict(int))
+    goals_made = defaultdict(lambda: defaultdict(int))
+    goals_let = defaultdict(lambda: defaultdict(int))
+    
     teammates = defaultdict(lambda: defaultdict(int))
     player_game_counts = defaultdict(int)
 
@@ -207,12 +210,23 @@ def get_player_profile(GAMES_FILE, player):
         players_red = [game['red_player1'], game.get('red_player2', '')]
         players_blue = [game['blue_player1'], game.get('blue_player2', '')]
 
+        # red_wins = True if game['red_goals'] > game['blue_goals'] else False
+        # blue_wins = True if game['blue_goals'] > game['red_goals'] else False
+
+        # only continue for current players
+        if player in players_blue or player in players_red:
+            pass
+        else:
+            continue
+        
+        # remove empty players (in 1v1 or 1v2)
         players_red = [p for p in players_red if p]
         players_blue = [p for p in players_blue if p]
         
         for p in players_red + players_blue:
             player_game_counts[p] += 1
         
+        # count teammates
         if len(players_red) > 1:
             teammates[game['red_player1']][game['red_player2']] += 1
             teammates[game['red_player2']][game['red_player1']] += 1
@@ -220,16 +234,23 @@ def get_player_profile(GAMES_FILE, player):
             teammates[game['blue_player1']][game['blue_player2']] += 1
             teammates[game['blue_player2']][game['blue_player1']] += 1
         
+        # count opponents
         for red_player in players_red:
             for blue_player in players_blue:
                 opponents[red_player][blue_player] += 1
+                goals_made[red_player][blue_player] += int(game['red_goals'])
+                goals_let[red_player][blue_player] += int(game['blue_goals'])
                 
         for blue_player in players_blue:
             for red_player in players_red:
                 opponents[blue_player][red_player] += 1
+                goals_made[blue_player][red_player] += int(game['blue_goals'])
+                goals_let[blue_player][red_player] += int(game['red_goals'])
 
     player_profile = dict(name=player, 
                           opponents=sorted(opponents[player].items(), key=lambda x: x[1], reverse=True)[:5],
                           teammates=sorted(teammates[player].items(), key=lambda x: x[1], reverse=True)[:5])
+    print(goals_let[player])
+    print(goals_made[player])
     
     return player_profile
