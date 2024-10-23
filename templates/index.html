@@ -36,7 +36,7 @@
                             {% endif %}
                             <li class="list-group-item">
                                 <div class="float-right">
-                                    {{ game.date }}
+                                    <span class="badge bg-secondary">{{ game.date }}</span>
                                     <form action="{{ url_for('edit_game', game_id=loop.index0) }}" method="GET" class="d-inline">
                                         <button type="submit" class="btn btn-light btn-sm">&#x270E</button>
                                     </form>
@@ -44,10 +44,15 @@
                                         <button type="submit" class="btn btn-light btn-sm">&#128465</button>
                                     </form>
                                 </div>
-                                <br>
-                                <div class="float-left">
-                                    <span class="badge bg-danger">{{ red_team }}</span> vs <span class="badge badge-primary">{{ blue_team }}</span> - {{ game.red_goals }} - {{ game.blue_goals }}
+                                <!-- <br> -->
+                                <div class="float-center">
+                                    <span class="badge bg-danger">{{ red_team }}</span> vs <span class="badge badge-primary">{{ blue_team }}</span> 
+                                    <br>
+                                    <span class="badge bg-danger">{{ game.red_goals }}</span> - <span class="badge bg-primary">{{ game.blue_goals }}</span>
                                 </div>
+                                <!-- <div class="float-center">
+                                </div> -->
+
                                 
 
                             </li>
@@ -195,7 +200,7 @@
                     listContainer1.innerHTML = '';
                     data.opponents.forEach(item => {
                         const listItem = document.createElement('li');
-                        listItem.textContent = `${item[0]}: ${item[1]}`;
+                        listItem.textContent = `${item[0]}: ${item[1].opponent} (kill-death ratio: ${(item[1].made/item[1].let).toFixed(2)})`;
                         listContainer1.appendChild(listItem);
                     });
 
