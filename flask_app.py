@@ -130,5 +130,15 @@ def player_profile(player):
     return jsonify(data)
 
 
+@app.route('/clean_db')
+def clean_db():
+    
+    players = load_data(PLAYERS_FILE)
+    players = [player for player in players if player["games"] >= 1]
+    save_data(players, PLAYERS_FILE)
+    
+    return redirect(url_for("index"))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
