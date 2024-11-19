@@ -34,9 +34,10 @@ def update_elo_ratings():
         player['games'] = 0
 
     # loop over all games and calculate ratings
-    for game in games:
+    for i, game in enumerate(games):
 
         game['players'] = {}
+        game['id'] = i
         
         # Calculate mean elo for the teams
         red_team_elo = (player_dict[game['red_player1']]['elo'] + player_dict[game['red_player2']]['elo']) / 2 if game['red_player2'] != "" else player_dict[game['red_player1']]['elo']
@@ -48,8 +49,6 @@ def update_elo_ratings():
         # Calculate the result of the game (scored goals/total goals)
         red_result = (float(game['red_goals']) + red_C) / (float(game['blue_goals']) + float(game['red_goals']))
         blue_result = (float(game['blue_goals']) + blue_C) / (float(game['blue_goals']) + float(game['red_goals']))
-        # red_result = float(game['red_goals']) / (float(game['blue_goals']) + float(game['red_goals']))
-        # blue_result = float(game['blue_goals']) / (float(game['blue_goals']) + float(game['red_goals']))
 
         # Calculate elo change for the teammembers
         red_elo_change = calculate_elo_change(red_team_elo, blue_team_elo, red_result)
