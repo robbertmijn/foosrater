@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import json
 import os
-from datetime import datetime
 from elo import update_elo_ratings, calculate_elo_change
+
+from analysis_utils import *
 
 app = Flask(__name__)
 
@@ -10,6 +11,7 @@ DATA_FOLDER = 'data'
 GAMES_FILE = os.path.join(DATA_FOLDER, 'games.json')
 PLAYERS_FILE = os.path.join(DATA_FOLDER, 'players.json')
 __VERSION = 1.1
+
 
 def load_data(file_path):
     if os.path.exists(file_path):
@@ -93,6 +95,49 @@ def delete_game(game_id):
     save_data(games, GAMES_FILE)
     update_elo_ratings()
     return redirect(url_for('index'))
+
+
+@app.route('/social_graph')
+def social_graph():
+    
+    social_graph = make_social_graph(GAMES_FILE)
+        
+    return render_template('social_graph.html', social_graph=social_graph)
+
+
+@app.route('/player_stats')
+def player_stats():
+    
+    player_stats = make_player_stats(GAMES_FILE)
+        
+    return render_template('player_stats.html', player_stats=player_stats)
+
+
+@app.route('/player_matrix')
+def player_matrix():
+    
+    players, matchups, counts = make_player_matrix(GAMES_FILE)
+        
+    return render_template('player_matrix.html', players=players, matchups=matchups, player_game_counts=counts)
+
+
+@app.route('/player/<string:player>')
+def player_profile(player):
+    
+    data = get_player_profile(GAMES_FILE, player)
+    print(data)
+    
+    return jsonify(data)
+
+
+@app.route('/clean_db')
+def clean_db():
+    
+    players = load_data(PLAYERS_FILE)
+    players = [player for player in players if player["games"] >= 1]
+    save_data(players, PLAYERS_FILE)
+    
+    return redirect(url_for("index"))
 
 
 if __name__ == '__main__':

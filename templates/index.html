@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HMT FoosRater</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}">
 </head>
 <body>
@@ -13,31 +14,29 @@
             <div class="col-auto">
                 <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay1">Ranking</button>
                 <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay2">Add game</button>
-                <!-- <button class="btn btn-dark" data-toggle="modal" data-target="#overlay3">Add game</button> -->
+                <a class="btn btn-dark" target="_blank" href="{{ url_for('player_stats') }}">Score Graph</a>
+                <a class="btn btn-dark" target="_blank" href="{{ url_for('social_graph') }}">Network</a>
+                <a class="btn btn-dark" target="_blank" href="https://github.com/robbertmijn/foosrater"><i class="fab fa-github"></i></a>
             </div>
         </div>
-        <!-- <div class="main-content" style="margin-top: 50px; height: calc(100% - 50px); display: flex; justify-content: center; align-items: center;"> -->
-        <!-- <div class="main-content"> -->
-            <!-- <div class="container"> -->
-                <!-- <div class="default-div p-3 border"> -->
                 <div class="default-div">
                     <h3>Games</h3>
                     <ul class="list-group">
                         {% for game in games %}
                             {% if game.red_player2 != "" %}
-                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ") " ~ " & " ~ game.red_player2 ~ " (" ~ game.red_player2_elo ~ ") " %}
+                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo_change | round(1) ~ ") " ~ " & " ~ game.red_player2 ~ " (" ~ game.red_player2_elo_change | round(1) ~ ") " %}
                             {% else %}
-                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo ~ ")"%}
+                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo_change | round(1) ~ ")"%}
                             {% endif %}
 
                             {% if game.blue_player2 != "" %}
-                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ") " ~ " & " ~ game.blue_player2 ~ " (" ~ game.blue_player2_elo ~ ") " %}
+                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo_change | round(1) ~ ") " ~ " & " ~ game.blue_player2 ~ " (" ~ game.blue_player2_elo_change | round(1) ~ ") " %}
                             {% else %}
-                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo ~ ")"%}
+                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo_change | round(1) ~ ")"%}
                             {% endif %}
                             <li class="list-group-item">
                                 <div class="float-right">
-                                    {{ game.date }}
+                                    <span class="badge bg-secondary">{{ game.date }}</span>
                                     <form action="{{ url_for('edit_game', game_id=loop.index0) }}" method="GET" class="d-inline">
                                         <button type="submit" class="btn btn-light btn-sm">&#x270E</button>
                                     </form>
@@ -45,22 +44,25 @@
                                         <button type="submit" class="btn btn-light btn-sm">&#128465</button>
                                     </form>
                                 </div>
-                                <br>
-                                <div class="float-left">
-                                    <span class="badge bg-danger">{{ red_team }}</span> vs <span class="badge badge-primary">{{ blue_team }}</span> - {{ game.red_goals }} - {{ game.blue_goals }}
+                                <!-- <br> -->
+                                <div class="float-center">
+                                    # {{ game.id }}. 
+                                    <span class="badge bg-danger">{{ red_team }}</span> vs <span class="badge badge-primary">{{ blue_team }}</span> 
+                                    <br>
+                                    <span class="badge bg-danger">{{ game.red_goals }}</span> - <span class="badge bg-primary">{{ game.blue_goals }}</span>
                                 </div>
+                                <!-- <div class="float-center">
+                                </div> -->
+
                                 
 
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
-            <!-- </div>
-        </div> -->
         version {{ version }}
     </div>
 
-    <!-- Overlay Modals -->
     <div class="modal fade" id="overlay2" tabindex="-1" role="dialog" aria-labelledby="overlay2Label" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -87,8 +89,9 @@
                                 <option value=9>9</option>
                                 <option value=10>10</option>
                               </select>
-                              <input type="text" id="red_player1" name="red_player1" class="form-control" required placeholder="Player 1" aria-label="Player 1">
-                              <input type="text" id="red_player2" name="red_player2" class="form-control" placeholder="Player 2" aria-label="Player 2">
+
+                                <input list="suggestionsList" id="red_player1" name="red_player1" class="form-control" required placeholder="Player 1" aria-label="Player 1">
+                                <input list="suggestionsList" id="red_player2" name="red_player2" class="form-control" placeholder="Player 2" aria-label="Player 2">
                         </div>
                         <label for="blue-team" class="form-label">Blue Team:</label>
                         <div class="input-group mb-3">
@@ -105,8 +108,8 @@
                                 <option value=9>9</option>
                                 <option value=10>10</option>
                               </select>
-                              <input type="text" id="blue_player1" name="blue_player1" class="form-control" required placeholder="Player 1" aria-label="Player 1">
-                              <input type="text" id="blue_player2" name="blue_player2" class="form-control" placeholder="Player 2" aria-label="Player 2">
+                              <input list="suggestionsList" id="blue_player1" name="blue_player1" class="form-control" required placeholder="Player 1" aria-label="Player 1">
+                              <input list="suggestionsList" id="blue_player2" name="blue_player2" class="form-control" placeholder="Player 2" aria-label="Player 2">
                             </div>
                         <div class="form-group">
                             <label for="date">Date:</label>
@@ -134,10 +137,37 @@
                     <ul class="list-group">
                         {% for player in players %}
                             <li class="list-group-item d-flex">
-                                {{ player.ranking }}. {{ player.name }} ({{ player.elo }}, n = {{ player.games }})
+                                <!-- <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay3">profile</button> -->
+                                {{ player.ranking }}.&nbsp;<span data-toggle="modal" data-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;({{ player.elo | round(1) }}, n = {{ player.games }})
                             </li>
                         {% endfor %}
+
+                        <datalist id="suggestionsList">
+                            {% for player in players %}
+                            <option value="{{ player.name }}"">
+                            {% endfor %}
+                        </datalist>
+
                     </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="overlay3" tabindex="-1" role="dialog" aria-labelledby="overlay3Label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="overlay3Label">&nbsp;</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6>Top 5 opponents:</h6>
+                    <ol id="list-opponents"></ol>
+                    <h6>Top 5 teammates:</h6>
+                    <ol id="list-teammates"></ol>
                 </div>
             </div>
         </div>
@@ -160,6 +190,43 @@
                 document.getElementById('error-message').style.display = 'none';
             }
         })
+
+        function fetchData(name) {
+            fetch(`/player/${name}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('overlay3Label').textContent = data.name;
+                    
+                    const listContainer1 = document.getElementById('list-opponents');
+                    listContainer1.innerHTML = '';
+                    data.opponents.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${item[0]}: ${item[1].opponent} (kill-death ratio: ${(item[1].made/item[1].let).toFixed(2)})`;
+                        listContainer1.appendChild(listItem);
+                    });
+
+                    const listContainer2 = document.getElementById('list-teammates');
+                    listContainer2.innerHTML = '';
+                    data.teammates.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${item[0]}: ${item[1]}`;
+                        listContainer2.appendChild(listItem);
+                    });
+
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        document.querySelectorAll('.name-link').forEach(item => {
+            item.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                console.log(name)
+                fetchData(name);  // Call fetch function with the clicked word
+            });
+        });
+
     </script>
 </body>
 </html>

@@ -34,38 +34,53 @@ def update_elo_ratings():
         player['games'] = 0
 
     # loop over all games and calculate ratings
-    for game in games:
+    for i, game in enumerate(games):
 
+        game['players'] = {}
+        game['id'] = i
+        
         # Calculate mean elo for the teams
         red_team_elo = (player_dict[game['red_player1']]['elo'] + player_dict[game['red_player2']]['elo']) / 2 if game['red_player2'] != "" else player_dict[game['red_player1']]['elo']
         blue_team_elo = (player_dict[game['blue_player1']]['elo'] + player_dict[game['blue_player2']]['elo']) / 2 if game['blue_player2'] != "" else player_dict[game['blue_player1']]['elo']
 
+        red_C = 1 if float(game['red_goals']) > float(game['blue_goals']) else 0
+        blue_C = 1 if float(game['blue_goals']) > float(game['red_goals']) else 0
+        
         # Calculate the result of the game (scored goals/total goals)
-        red_result = int(game['red_goals']) / (int(game['blue_goals']) + int(game['red_goals']))
-        blue_result = int(game['blue_goals']) / (int(game['blue_goals']) + int(game['red_goals']))
+        red_result = (float(game['red_goals']) + red_C) / (float(game['blue_goals']) + float(game['red_goals']))
+        blue_result = (float(game['blue_goals']) + blue_C) / (float(game['blue_goals']) + float(game['red_goals']))
 
         # Calculate elo change for the teammembers
         red_elo_change = calculate_elo_change(red_team_elo, blue_team_elo, red_result)
         blue_elo_change = calculate_elo_change(blue_team_elo, red_team_elo, blue_result)
 
         # edit player and game database
-        player_dict[game['red_player1']]['elo'] += int(red_elo_change)
+        player_dict[game['red_player1']]['elo'] += red_elo_change
         player_dict[game['red_player1']]['games'] += 1
-        game['red_player1_elo'] = int(red_elo_change)
+        game['red_player1_elo_change'] = red_elo_change
+        game['red_player1_elo'] = player_dict[game['red_player1']]['elo']
+        game['players'][game['red_player1']] = player_dict[game['red_player1']]['elo']
 
-        player_dict[game['blue_player1']]['elo'] += int(blue_elo_change)
+        player_dict[game['blue_player1']]['elo'] += blue_elo_change
         player_dict[game['blue_player1']]['games'] += 1
-        game['blue_player1_elo'] = int(blue_elo_change)
+        game['blue_player1_elo_change'] = blue_elo_change
+        game['blue_player1_elo'] = player_dict[game['blue_player1']]['elo']
+        game['players'][game['blue_player1']] = player_dict[game['blue_player1']]['elo']
 
         # in case of 2v1 or 2v2
         if game['red_player2'] != "":
-            player_dict[game['red_player2']]['elo'] += int(red_elo_change)
+            player_dict[game['red_player2']]['elo'] += red_elo_change
             player_dict[game['red_player2']]['games'] += 1
-            game['red_player2_elo'] = int(red_elo_change)
+            game['red_player2_elo_change'] = red_elo_change
+            game['red_player2_elo'] = player_dict[game['red_player2']]['elo']
+            game['players'][game['red_player2']] = player_dict[game['red_player2']]['elo']
+
         if game['blue_player2'] != "":
-            player_dict[game['blue_player2']]['elo'] += int(blue_elo_change)
+            player_dict[game['blue_player2']]['elo'] += blue_elo_change
             player_dict[game['blue_player2']]['games'] += 1
-            game['blue_player2_elo'] = int(blue_elo_change)
+            game['blue_player2_elo_change'] = blue_elo_change
+            game['blue_player2_elo'] = player_dict[game['blue_player2']]['elo']
+            game['players'][game['blue_player2']] = player_dict[game['blue_player2']]['elo']
 
     # overwrite previous players dict with newly sorted dict
     players = list(player_dict.values())
