@@ -19,49 +19,71 @@
                 <a class="btn btn-dark" target="_blank" href="https://github.com/robbertmijn/foosrater"><i class="fab fa-github"></i></a>
             </div>
         </div>
-                <div class="default-div">
-                    <h3>Games</h3>
-                    <ul class="list-group">
-                        {% for game in games %}
-                            {% if game.red_player2 != "" %}
-                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo_change | round(1) ~ ") " ~ " & " ~ game.red_player2 ~ " (" ~ game.red_player2_elo_change | round(1) ~ ") " %}
-                            {% else %}
-                                {% set red_team = game.red_player1 ~ " (" ~ game.red_player1_elo_change | round(1) ~ ")"%}
-                            {% endif %}
-
-                            {% if game.blue_player2 != "" %}
-                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo_change | round(1) ~ ") " ~ " & " ~ game.blue_player2 ~ " (" ~ game.blue_player2_elo_change | round(1) ~ ") " %}
-                            {% else %}
-                                {% set blue_team = game.blue_player1 ~ " (" ~ game.blue_player1_elo_change | round(1) ~ ")"%}
-                            {% endif %}
-                            <li class="list-group-item">
-                                <div class="float-right">
-                                    <span class="badge bg-secondary">{{ game.date }}</span>
-                                    <form action="{{ url_for('edit_game', game_id=loop.index0) }}" method="GET" class="d-inline">
-                                        <button type="submit" class="btn btn-light btn-sm">&#x270E</button>
-                                    </form>
-                                    <form action="{{ url_for('delete_game', game_id=loop.index0) }}" method="POST" class="d-inline">
-                                        <button type="submit" class="btn btn-light btn-sm">&#128465</button>
-                                    </form>
+        <div class="container my-2">
+            <br>
+            <br>
+            <br>
+            <br>
+            <table class="table">
+                <tbody>
+                    {% for game in games %}
+                    <tr>
+                        <td class="id-date">
+                            <div class="d-flex flex-column align-items-center">
+                                <strong># {{ game.id }}</strong>
+                                <small>{{ game.date }}</small>
+                            </div>
+                        </td>
+                        <td class="team">
+                            <div class="team-container team-red">
+                                <div class="player-card">
+                                    <span class="emoji">{{ game.red_player1_league }}</span>
+                                    <span class="player-name">{{ game.red_player1 }}</span>
+                                    <span class="player-rating">{{ game.red_player1_elo_change | default(0) | round(1) }}</span>
                                 </div>
-                                <!-- <br> -->
-                                <div class="float-center">
-                                    # {{ game.id }}. 
-                                    <span class="badge bg-danger">{{ red_team }}</span> vs <span class="badge badge-primary">{{ blue_team }}</span> 
-                                    <br>
-                                    <span class="badge bg-danger">{{ game.red_goals }}</span> - <span class="badge bg-primary">{{ game.blue_goals }}</span>
+                                {% if game.red_player2 != "" %}
+                                <div class="player-card">
+                                    <span class="emoji">{{ game.red_player2_league }}</span>
+                                    <span class="player-name">{{ game.red_player2 }}</span>
+                                    <span class="player-rating">{{ game.red_player2_elo_change | default(0) | round(1) }}</span>
                                 </div>
-                                <!-- <div class="float-center">
-                                </div> -->
-
-                                
-
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-        version {{ version }}
-    </div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="score">
+                            <div class="goal-container">
+                                <span>{{ game.red_goals }} - {{ game.blue_goals }}</span>
+                            </div>
+                        </td>
+                        <td class="team">
+                            <div class="team-container team-blue">
+                                <div class="player-card">
+                                    <span class="emoji">{{ game.blue_player1_league }}</span>
+                                    <span class="player-name">{{ game.blue_player1 }}</span>
+                                    <span class="player-rating">{{ game.blue_player1_elo_change | default(0) | round(1) }}</span>
+                                </div>
+                                {% if game.blue_player2 != "" %}
+                                <div class="player-card">
+                                    <span class="emoji">{{ game.blue_player2_league }}</span>
+                                    <span class="player-name">{{ game.blue_player2 }}</span>
+                                    <span class="player-rating">{{ game.blue_player2_elo_change | default(0) | round(1) }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="actions">
+                            <div class="action-icons">
+                                <i class="fas fa-pencil-alt"></i>
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+    
+                </tbody>
+            </table>
+        </div>
+    <!-- </div> -->
 
     <div class="modal fade" id="overlay2" tabindex="-1" role="dialog" aria-labelledby="overlay2Label" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -137,8 +159,7 @@
                     <ul class="list-group">
                         {% for player in players %}
                             <li class="list-group-item d-flex">
-                                <!-- <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay3">profile</button> -->
-                                {{ player.ranking }}.&nbsp;<span data-toggle="modal" data-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;({{ player.elo | round(1) }}, n = {{ player.games }})
+                                {{ player.ranking }}.&nbsp;<span data-toggle="modal" data-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;(elo: {{ player.elo | round(1) }}, {{ player.games }} games, {{ player.league }} league)
                             </li>
                         {% endfor %}
 

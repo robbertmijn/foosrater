@@ -5,6 +5,7 @@ body, html {
     width: 100%;
     height: 100%;
     font-family: Arial, sans-serif;
+    font-size: 0.8rem;
 }
 
 .main-content {
@@ -28,4 +29,151 @@ body, html {
     color: blue !important;
     text-decoration: underline !important;
     cursor: pointer;
+}
+
+.team-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 1px;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+.player-card {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    padding: 2px;
+    margin: 2px;
+    flex: 1 1 45%;
+    display: grid;
+    align-items: center;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "emoji name rating";
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.player-card .emoji {
+    grid-area: emoji;
+    font-size: 1.5rem;
+    text-align: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    padding-right: 5px;
+}
+.player-card .player-name {
+    grid-area: name;
+    font-weight: bold;
+    text-align: center;
+    padding: 0 2px; /* Reduced padding */
+}
+.player-card .player-rating {
+    grid-area: rating;
+    text-align: center;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    padding-left: 5px;
+}
+@media (max-width: 576px) {
+    .player-card {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+            "name name"
+            "emoji rating";
+    }
+    .player-card .emoji {
+        grid-area: emoji;
+        text-align: center;
+        border-right: none;
+        padding-top: 5px;
+    }
+    .player-card .player-rating {
+        grid-area: rating;
+        text-align: center;
+        border-left: 1px solid rgba(255, 255, 255, 0.3);
+        padding-top: 5px;
+    }
+    .player-card .player-name {
+        grid-area: name;
+        text-align: center;
+        padding: 2px; /* Reduced padding */
+    }
+}
+.goal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    white-space: nowrap;
+    overflow: visible;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+.goal-container span {
+    display: inline-block;
+    padding: 5px;
+    background-color: #fff;
+    color: #000;
+    border-radius: 5px;
+    min-width: 50px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.action-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.action-icons i {
+    cursor: pointer;
+    margin: 5px 0;
+}
+/* Red and blue team colors */
+.team-red {
+    background-color: #dc3545;
+    z-index: 0;
+}
+.team-blue {
+    background-color: #0d6efd;
+    z-index: 0;
+}
+td {
+    vertical-align: middle;
+    position: relative;
+    overflow: hidden;
+}
+td.id-date,
+td.actions {
+    width: 10%;
+    text-align: center;
+}
+td.score {
+    width: 10%;
+    text-align: center;
+}
+td.team {
+    width: 35%;
+}
+.table {
+    table-layout: fixed;
+    width: 100%;
+}
+/* Remove vertical borders, only have subtle horizontal dividers between rows */
+.table td {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border: none;
+}
+.table tr {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+@media (max-width: 576px) {
+    .container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
 }
