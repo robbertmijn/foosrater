@@ -21,6 +21,24 @@ def calculate_elo_change(player_elo, opponent_elo, result):
     expected_score = 1 / (1 + 10 ** ((opponent_elo - player_elo) / 400))
     return K_FACTOR * (result - expected_score)
 
+def get_league(elo):
+    if 0 <= elo < 1000:
+        return "🎷"
+    elif 1000 <= elo < 1050:
+        return "🛒"
+    elif 1050 <= elo < 1100:
+        return "🏹"
+    elif 1100 <= elo < 1150:
+        return "🧀"
+    elif 1150 <= elo < 1200:
+        return "🤖"
+    elif 1200 <= elo < 1250:
+        return "🗜️"
+    elif elo > 1250:
+        return "🥼"
+    else:
+        return "❌"
+
 def update_elo_ratings():
 
     # Load names of previous players
@@ -59,12 +77,14 @@ def update_elo_ratings():
         player_dict[game['red_player1']]['games'] += 1
         game['red_player1_elo_change'] = red_elo_change
         game['red_player1_elo'] = player_dict[game['red_player1']]['elo']
+        game['red_player1_league'] = get_league(player_dict[game['red_player1']]['elo'])
         game['players'][game['red_player1']] = player_dict[game['red_player1']]['elo']
 
         player_dict[game['blue_player1']]['elo'] += blue_elo_change
         player_dict[game['blue_player1']]['games'] += 1
         game['blue_player1_elo_change'] = blue_elo_change
         game['blue_player1_elo'] = player_dict[game['blue_player1']]['elo']
+        game['blue_player1_league'] = get_league(player_dict[game['blue_player1']]['elo'])
         game['players'][game['blue_player1']] = player_dict[game['blue_player1']]['elo']
 
         # in case of 2v1 or 2v2
@@ -73,6 +93,7 @@ def update_elo_ratings():
             player_dict[game['red_player2']]['games'] += 1
             game['red_player2_elo_change'] = red_elo_change
             game['red_player2_elo'] = player_dict[game['red_player2']]['elo']
+            game['red_player2_league'] = get_league(player_dict[game['red_player2']]['elo'])
             game['players'][game['red_player2']] = player_dict[game['red_player2']]['elo']
 
         if game['blue_player2'] != "":
@@ -80,6 +101,7 @@ def update_elo_ratings():
             player_dict[game['blue_player2']]['games'] += 1
             game['blue_player2_elo_change'] = blue_elo_change
             game['blue_player2_elo'] = player_dict[game['blue_player2']]['elo']
+            game['blue_player2_league'] = get_league(player_dict[game['blue_player2']]['elo'])
             game['players'][game['blue_player2']] = player_dict[game['blue_player2']]['elo']
 
     # overwrite previous players dict with newly sorted dict
@@ -87,6 +109,7 @@ def update_elo_ratings():
     players = sorted(players, key=lambda x: x['elo'], reverse=True)
     for i, player in enumerate(players):
         player["ranking"] = i + 1
+        player["league"] = get_league(player["elo"])
 
     save_data(players, PLAYERS_FILE)
     save_data(games, GAMES_FILE)
