@@ -73,8 +73,10 @@
                         </td>
                         <td class="actions">
                             <div class="action-icons">
-                                <i class="fas fa-pencil-alt"></i>
-                                <i class="fas fa-trash"></i>
+                                <i class="fas fa-pencil-alt" style="cursor: pointer;" 
+                                onclick="window.location.href='{{ url_for("edit_game", game_id=loop.index0) }}'"></i>
+                                <i class="fas fa-trash" style="cursor: pointer;" 
+                                onclick="sendPostRequest('{{ url_for("delete_game", game_id=loop.index0) }}')"></i>
                             </div>
                         </td>
                     </tr>
@@ -247,6 +249,23 @@
                 fetchData(name);  // Call fetch function with the clicked word
             });
         });
+
+        function sendPostRequest(url) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            }).then(response => {
+                if (response.ok) {
+                    location.reload(); // Reload the page or handle success
+                } else {
+                    alert('Failed to delete the game.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+}   
 
     </script>
 </body>
