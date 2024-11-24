@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>League Games</title>
+    <!-- Add viewport meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include Bootstrap CSS (Bootstrap 5) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional custom styles -->
+    <style>
+        body {
+            font-size: 0.9rem;
+        }
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 2px;
+            color: #fff;
+            position: relative;
+            border-radius: 5px;
+        }
+        .player-card {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 2px;
+            margin: 2px;
+            flex: 1 1 45%;
+            display: grid;
+            align-items: center;
+            grid-template-columns: auto 1fr auto;
+            grid-template-areas: "emoji name rating";
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .player-card .emoji {
+            grid-area: emoji;
+            font-size: 1.5rem;
+            text-align: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+            padding-right: 5px;
+        }
+        .player-card .player-name {
+            grid-area: name;
+            font-weight: bold;
+            text-align: center;
+            padding: 0 5px;
+        }
+        .player-card .player-rating {
+            grid-area: rating;
+            text-align: center;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            padding-left: 5px;
+        }
+        @media (max-width: 576px) {
+            .player-card {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+                grid-template-areas:
+                    "name name"
+                    "emoji rating";
+            }
+            .player-card .emoji {
+                grid-area: emoji;
+                text-align: center;
+                border-right: none;
+                padding-top: 5px;
+            }
+            .player-card .player-rating {
+                grid-area: rating;
+                text-align: center;
+                border-left: 1px solid rgba(255, 255, 255, 0.3);
+                padding-top: 5px;
+            }
+            .player-card .player-name {
+                grid-area: name;
+                text-align: center;
+                padding: 5px;
+            }
+        }
+        .goal-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            white-space: nowrap;
+            overflow: visible;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        .goal-container span {
+            display: inline-block;
+            padding: 5px;
+            background-color: #fff;
+            color: #000;
+            border-radius: 5px;
+            min-width: 50px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .action-icons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .action-icons i {
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        /* Red and blue team colors */
+        .team-red {
+            background-color: #dc3545;
+            z-index: 0;
+        }
+        .team-blue {
+            background-color: #0d6efd;
+            z-index: 0;
+        }
+        td {
+            vertical-align: middle;
+            position: relative;
+            overflow: hidden;
+        }
+        td.id-date,
+        td.actions {
+            width: 10%;
+            text-align: center;
+        }
+        td.score {
+            width: 10%;
+            text-align: center;
+        }
+        td.team {
+            width: 35%;
+        }
+        .table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        /* Remove vertical borders, only have subtle horizontal dividers between rows */
+        .table td {
+            border: none;
+        }
+        .table tr {
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .table tbody tr:last-child {
+            border-bottom: none;
+        }
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+    </style>
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container my-2">
+        <!-- No headers as per request -->
+        <table class="table">
+            <tbody>
+                <!-- First game row -->
+                <tr>
+                    <td class="id-date">
+                        <div class="d-flex flex-column align-items-center">
+                            <strong>#1</strong>
+                            <small>2023-10-01</small>
+                        </div>
+                    </td>
+                    <td class="team">
+                        <div class="team-container team-red">
+                            <div class="player-card">
+                                <span class="emoji">😀</span>
+                                <span class="player-name">Player Red 1</span>
+                                <span class="player-rating">1500</span>
+                            </div>
+                            <div class="player-card">
+                                <span class="emoji">😎</span>
+                                <span class="player-name">Player Red 2</span>
+                                <span class="player-rating">1450</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="score">
+                        <div class="goal-container">
+                            <span>3 - 2</span>
+                        </div>
+                    </td>
+                    <td class="team">
+                        <div class="team-container team-blue">
+                            <div class="player-card">
+                                <span class="emoji">🤖</span>
+                                <span class="player-name">Player Blue 1</span>
+                                <span class="player-rating">1480</span>
+                            </div>
+                            <div class="player-card">
+                                <span class="emoji">👽</span>
+                                <span class="player-name">Player Blue 2</span>
+                                <span class="player-rating">1520</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="actions">
+                        <div class="action-icons">
+                            <i class="fas fa-pencil-alt"></i>
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Second game row with red team having only one player -->
+                <tr>
+                    <td class="id-date">
+                        <div class="d-flex flex-column align-items-center">
+                            <strong>#2</strong>
+                            <small>2023-10-02</small>
+                        </div>
+                    </td>
+                    <td class="team">
+                        <div class="team-container team-red">
+                            <div class="player-card">
+                                <span class="emoji">🧑</span>
+                                <span class="player-name">Solo Red</span>
+                                <span class="player-rating">1550</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="score">
+                        <div class="goal-container">
+                            <span>1 - 4</span>
+                        </div>
+                    </td>
+                    <td class="team">
+                        <div class="team-container team-blue">
+                            <div class="player-card">
+                                <span class="emoji">🧙‍♂️</span>
+                                <span class="player-name">Player Blue 3</span>
+                                <span class="player-rating">1490</span>
+                            </div>
+                            <div class="player-card">
+                                <span class="emoji">🦸‍♀️</span>
+                                <span class="player-name">Player Blue 4</span>
+                                <span class="player-rating">1510</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="actions">
+                        <div class="action-icons">
+                            <i class="fas fa-pencil-alt"></i>
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Third game row with 1v1 game -->
+                <tr>
+                    <td class="id-date">
+                        <div class="d-flex flex-column align-items-center">
+                            <strong>#3</strong>
+                            <small>2023-10-03</small>
+                        </div>
+                    </td>
+                    <td class="team">
+                        <div class="team-container team-red">
+                            <div class="player-card">
+                                <span class="emoji">🕵️‍♂️</span>
+                                <span class="player-name">Player Red 3</span>
+                                <span class="player-rating">1600</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="score">
+                        <div class="goal-container">
+                            <span>2 - 2</span>
+                        </div>
+                    </td>
+                    <td class="team">
+                        <div class="team-container team-blue">
+                            <div class="player-card">
+                                <span class="emoji">🧛‍♂️</span>
+                                <span class="player-name">Player Blue 5</span>
+                                <span class="player-rating">1580</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="actions">
+                        <div class="action-icons">
+                            <i class="fas fa-pencil-alt"></i>
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </td>
+                </tr>
+                {% for game in games %}
+                <tr>
+                    <td class="id-date">
+                        <div class="d-flex flex-column align-items-center">
+                            <strong># {{ game.id }}</strong>
+                            <small>{{ game.date }}</small>
+                        </div>
+                    </td>
+                    <td class="team">
+                        <div class="team-container team-red">
+                            <div class="player-card">
+                                <span class="emoji">😀</span>
+                                <span class="player-name">{{ game.red_player1 }}</span>
+                                <span class="player-rating">{{ game.red_player1_elo_change }}</span>
+                            </div>
+                            <div class="player-card">
+                                <span class="emoji">😎</span>
+                                <span class="player-name">{{ game.red_player2 }}</span>
+                                <span class="player-rating">{{ game.red_player2_elo_change }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="score">
+                        <div class="goal-container">
+                            <span>{{ game.red_goals }} - {{ game.blue_goals }}</span>
+                        </div>
+                    </td>
+                    <td class="team">
+                        <div class="team-container team-blue">
+                            <div class="player-card">
+                                <span class="emoji">😀</span>
+                                <span class="player-name">{{ game.blue_player1 }}</span>
+                                <span class="player-rating">{{ game.blue_player1_elo_change }}</span>
+                            </div>
+                            <div class="player-card">
+                                <span class="emoji">😎</span>
+                                <span class="player-name">{{ game.blue_player2 }}</span>
+                                <span class="player-rating">{{ game.blue_player2_elo_change }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="actions">
+                        <div class="action-icons">
+                            <i class="fas fa-pencil-alt"></i>
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
