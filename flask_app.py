@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import json
 import os
-from elo import update_elo_ratings, calculate_elo_change
+from elo import update_elo_ratings
 
 from analysis_utils import *
 
