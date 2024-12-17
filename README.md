@@ -53,13 +53,21 @@ This repository contains a Flask web application that tracks 2v2 foosball game r
 The outcome of each game is predicted based on the ratings of the players. A team with a higher mean rating \(R\) compared to the other team is expected to score a higher proportion of the points in a game. At the end of each game, each players' rating is updated by multiplaying the difference between their expected score \(E\) and their actual score by a constant \(K\)
 
 **Initial Ratings:** All players start with a default rating $R$ of 1000.
+
 **Outcome:**
+
 $$O_{\text{red team}}=\frac{\text{red goals}}{\text{red goals}+\text{blue goals}}$$
+
 **Expected Outcome:**
+
 $$E_{\text{red team}}=\frac{1}{1 + 10^{(R_{\text{blue team}}-R_{\text{red team}}) / 400}}$$
+
 where $R$ is determined by the initial rating and the updating after previous games.
+
 The new rating is updated as:
+
 $$R_{\text{new}} = R_{\text{old}} + K \times (O - E)$$
+
 $K$: A constant determining the magnitude of rating changes.
 
 For example, the expected outcome of a 1100 rated team vs a 900 rated team is $\frac{1}{1 + 10^{200 / 400}} = 0.24$, meaning that the lower rated team is expected to score 24% of the total goals (i.e., about 3.16 goals, given the winning team ends at 10).
