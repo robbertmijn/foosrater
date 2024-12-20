@@ -34,8 +34,12 @@ def get_league(elo):
         return "🤖"
     elif 1200 <= elo < 1250:
         return "🗜️"
-    elif elo > 1250:
+    elif 1200 <= elo < 1250:
         return "🥼"
+    elif 1250 <= elo < 1300:
+        return "🦒"
+    elif 1300 <= elo < 1350:
+        return "🦋"
     else:
         return "❌"
 
