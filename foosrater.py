@@ -13,19 +13,30 @@ def _load_team_elo(team):
         """
 
         if "" in team: 
-            return team[0].elo
+            return team[0].elo[-1]
         else:
-            return (team[0].elo + team[1].elo) / 2
+            return (team[0].elo[-1] + team[1].elo[-1]) / 2
         
 
 def _expected_outcome_red(red_elo, blue_elo):
     return 1 / (1 + 10 ** ((red_elo - blue_elo) / 400))
 
 class Player:
-    def __init__(self, name: str, elo: int = 1000, games: list = None):
+    def __init__(self, name: str, elo: list = [1000], games: list = None):
         self.name = name
         self.elo = elo
         self.games = games if games is not None else []
+    
+
+    def plot_elo(self):
+        import matplotlib.pyplot as plt
+        from datetime import datetime
+        plt.figure("Scatterplot with Dates", figsize=(8, 6))  # Creates or references a figure named "Scatterplot with Dates"
+        plt.clf()  # Clear the figure to overwrite any existing content
+        plt.scatter([datetime.strptime(g.date_time, "%Y-%m-%d") for g in self.games], self.elo[1:])
+        plt.plot([datetime.strptime(g.date_time, "%Y-%m-%d") for g in self.games], self.elo[1:])
+
+        plt.show()
 
     def __repr__(self):
         return self.name
@@ -38,12 +49,12 @@ class Game:
                  blue_score: int, 
                  date_time: datetime):
         self.R1, self.R2, self.B1, self.B2 = players
-        self.r1_elo = self.R1.elo
-        self.r2_elo = self.R2.elo
+        self.r1_elo = self.R1.elo[-1]
+        self.r2_elo = self.R2.elo[-1]
         self.r1_elo_delta = 0
         self.r2_elo_delta = 0
-        self.b1_elo = self.B1.elo
-        self.b2_elo = self.B2.elo
+        self.b1_elo = self.B1.elo[-1]
+        self.b2_elo = self.B2.elo[-1]
         self.b1_elo_delta = 0
         self.b2_elo_delta = 0
         self.red_score = int(red_score)
@@ -76,7 +87,7 @@ class League:
         
         foosdat = []
         for game in self.games:
-            players = game.R1 + game.R2 + game.B1 + game.B2
+            players = game.R1.name + game.R2.name + game.B1.name + game.name
             foosdat.append([players + 
                            [game.red_score] + 
                            [game.blue_score] + 
@@ -101,14 +112,14 @@ class League:
                  blue_score: int, 
                  date_time: datetime):
 
-        players = []
+        cur_players = []
         for player_name in player_names:
             self.add_player(player_name)
-            players.append(self.players[player_name])
+            cur_players.append(self.players[player_name])
                 
-        game = Game(players, red_score, blue_score, date_time)
+        game = Game(cur_players, red_score, blue_score, date_time)
 
-        for player in players:
+        for player in cur_players:
             player.games.append(game)
             
         self.games.append(game)
@@ -118,6 +129,7 @@ class League:
 
     def edit_game(self, game_index: int, red_score: int, blue_score: int):
         if 0 <= game_index < len(self.games):
+            # TODO: edit date_time
             self.games[game_index].red_score = red_score
             self.games[game_index].blue_score = blue_score
         else:
@@ -129,8 +141,9 @@ class League:
         K = 32
 
         for player in self.players.values():
-            player.elo = 1000.0
+            player.elo = [1000.0]
 
+        # TODO: sort games on date
         for game in reversed(self.games):
             # calculate proportion of red goals
             red_outcome = game.red_score / (game.red_score + game.blue_score)
@@ -141,18 +154,28 @@ class League:
             expected_outcome_blue = 1 - expected_outcome_red
 
             game.abs_error = abs(expected_outcome_red - red_outcome)
-            print(game.abs_error)
 
-            game.R1.elo += (red_outcome - expected_outcome_red) * K
-            game.R2.elo += (red_outcome - expected_outcome_red) * K
-            game.B1.elo += (blue_outcome - expected_outcome_blue) * K
-            game.B2.elo += (blue_outcome - expected_outcome_blue) * K
+            # TODO: these are not changed in edit yet!
+            game.R1.elo.append(game.R1.elo[-1] + (red_outcome - expected_outcome_red) * K)
+            game.R2.elo.append(game.R2.elo[-1] + (red_outcome - expected_outcome_red) * K)
+            game.B1.elo.append(game.B1.elo[-1] + (blue_outcome - expected_outcome_blue) * K)
+            game.B2.elo.append(game.B2.elo[-1] + (blue_outcome - expected_outcome_blue) * K)
             
+
+    def _sort_players(self):
+
+        self.players = dict(sorted(self.players.items(), key=lambda kv: kv[1].elo[-1]))
+        
 
     def __repr__(self):
         
         return(f"{self.games}")
     
 
-# league = League()
-# league.load_foosdat("foosrater/data/foosdat.csv")
+league = League()
+league.load_foosdat("foosrater/data/foosdat.csv")
+# league.players["Robbert"].plot_elo()
+# league.players["Robin"].plot_elo()
+# print(league._get_ranking())
+league._sort_players()
+[f"{p.name}/{p.elo[-1]}" for p in league.players]
