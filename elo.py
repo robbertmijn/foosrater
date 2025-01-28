@@ -48,7 +48,7 @@ def update_elo_ratings():
     # Load names of previous players
     players = load_data(PLAYERS_FILE)
     games = load_data(GAMES_FILE)
-
+    
     # Create fresh dict with all players reset to base elo
     player_dict = {player['name']: player for player in players}
     for player in player_dict.values():

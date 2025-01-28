@@ -87,7 +87,7 @@ class League:
         
         foosdat = []
         for game in self.games:
-            players = game.R1.name + game.R2.name + game.B1.name + game.name
+            players = [game.R1.name, game.R2.name, game.B1.name, game.B2.name]
             foosdat.append([players + 
                            [game.red_score] + 
                            [game.blue_score] + 
@@ -173,9 +173,9 @@ class League:
     
 
 league = League()
-league.load_foosdat("foosrater/data/foosdat.csv")
-# league.players["Robbert"].plot_elo()
-# league.players["Robin"].plot_elo()
-# print(league._get_ranking())
-league._sort_players()
-[f"{p.name}/{p.elo[-1]}" for p in league.players]
+league.load_foosdat("data/foosdat_2025.csv")
+# # league.players["Robbert"].plot_elo()
+# # league.players["Robin"].plot_elo()
+# # print(league._get_ranking())
+# league._sort_players()
+# [f"{p.name}/{p.elo[-1]}" for p in league.players]
