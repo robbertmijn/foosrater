@@ -1,10 +1,15 @@
-from flask_app import load_data
+import os
+import json
 import csv
-# import foosrater.foosrater as fr
 import foosrater as fr
 
+def load_data(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as f:
+            return json.load(f)
+    return []
 
-games = load_data("data/games_2025.json")
+games = load_data("data/games_2024.json")
 foosdat = []
 for game in games:
     foosdat.append([game["red_player1"],
@@ -16,7 +21,7 @@ for game in games:
                     game["date"],
                     ])
 
-with open("data/foosdat_2025.csv", mode="w", newline="", encoding="utf-8") as file:
+with open("data/foosdat_2024.csv", mode="w", newline="", encoding="utf-8") as file:
     writer = csv.writer(file)
     writer.writerows(foosdat)
 
@@ -26,8 +31,8 @@ with open("data/foosdat_2025.csv", mode="w", newline="", encoding="utf-8") as fi
 #         print(row)
 
 league = fr.League()
-league.load_foosdat("data/foosdat_2025.csv")
+league.load_foosdat("data/foosdat_2024.csv")
 
-league.save_foosdat("data/foosdat_2025.csv")
+league.save_foosdat("data/foosdat_2024.csv")
 
 print(league)

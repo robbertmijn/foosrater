@@ -44,10 +44,12 @@ class Player:
 
 class Game:
     def __init__(self, 
+                 id: int,
                  players: list,
                  red_score: int, 
                  blue_score: int, 
                  date_time: datetime):
+        self.id = id
         self.R1, self.R2, self.B1, self.B2 = players
         self.r1_elo = self.R1.elo[-1]
         self.r2_elo = self.R2.elo[-1]
@@ -116,8 +118,9 @@ class League:
         for player_name in player_names:
             self.add_player(player_name)
             cur_players.append(self.players[player_name])
-                
-        game = Game(cur_players, red_score, blue_score, date_time)
+        
+        game_id = len(self.games)
+        game = Game(1, cur_players, red_score, blue_score, date_time)
 
         for player in cur_players:
             player.games.append(game)
@@ -172,8 +175,8 @@ class League:
         return(f"{self.games}")
     
 
-league = League()
-league.load_foosdat("data/foosdat_2025.csv")
+# league = League()
+# league.load_foosdat("data/foosdat_2025.csv")
 # # league.players["Robbert"].plot_elo()
 # # league.players["Robin"].plot_elo()
 # # print(league._get_ranking())

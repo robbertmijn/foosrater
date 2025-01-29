@@ -37,48 +37,48 @@
                         <td class="team">
                             <div class="team-container team-red">
                                 <div class="player-card">
-                                    <span class="emoji">{{ game.red_player1_league }}</span>
-                                    <span class="player-name">{{ game.red_player1 }}</span>
-                                    <span class="player-rating">{{ game.red_player1_elo_change | default(0) | round(1) }}</span>
+                                    <!-- <span class="emoji">{{ game.red_player1_league }}</span> -->
+                                    <span class="player-name">{{ game.R1 }}</span>
+                                    <span class="player-rating">{{ game.r1_elo_delta | default(0) | round(1) }}</span>
                                 </div>
-                                {% if game.red_player2 != "" %}
+                                {% if game.R2 != "" %}
                                 <div class="player-card">
-                                    <span class="emoji">{{ game.red_player2_league }}</span>
-                                    <span class="player-name">{{ game.red_player2 }}</span>
-                                    <span class="player-rating">{{ game.red_player2_elo_change | default(0) | round(1) }}</span>
+                                    <!-- <span class="emoji">{{ game.red_player2_league }}</span> -->
+                                    <span class="player-name">{{ game.R2 }}</span>
+                                    <span class="player-rating">{{ game.r2_elo_delta | default(0) | round(1) }}</span>
                                 </div>
                                 {% endif %}
                             </div>
                         </td>
                         <td class="score">
                             <div class="goal-container">
-                                <span>{{ game.red_goals }} - {{ game.blue_goals }}</span>
+                                <span>{{ game.red_score }} - {{ game.blue_score }}</span>
                             </div>
                         </td>
                         <td class="team">
                             <div class="team-container team-blue">
                                 <div class="player-card">
-                                    <span class="emoji">{{ game.blue_player1_league }}</span>
-                                    <span class="player-name">{{ game.blue_player1 }}</span>
-                                    <span class="player-rating">{{ game.blue_player1_elo_change | default(0) | round(1) }}</span>
+                                    <!-- <span class="emoji">{{ game.blue_player1_league }}</span> -->
+                                    <span class="player-name">{{ game.B1 }}</span>
+                                    <span class="player-rating">{{ game.b1_elo_delta | default(0) | round(1) }}</span>
                                 </div>
-                                {% if game.blue_player2 != "" %}
+                                {% if game.B2 != "" %}
                                 <div class="player-card">
-                                    <span class="emoji">{{ game.blue_player2_league }}</span>
-                                    <span class="player-name">{{ game.blue_player2 }}</span>
-                                    <span class="player-rating">{{ game.blue_player2_elo_change | default(0) | round(1) }}</span>
+                                    <!-- <span class="emoji">{{ game.blue_player2_league }}</span> -->
+                                    <span class="player-name">{{ game.B2 }}</span>
+                                    <span class="player-rating">{{ game.b2_elo_delta | default(0) | round(1) }}</span>
                                 </div>
                                 {% endif %}
                             </div>
                         </td>
-                        <td class="actions">
+                        <!-- <td class="actions">
                             <div class="action-icons">
                                 <i class="fas fa-pencil-alt" style="cursor: pointer;" 
                                 onclick="window.location.href='{{ url_for("edit_game", game_id=loop.index0) }}'"></i>
                                 <i class="fas fa-trash" style="cursor: pointer;" 
                                 onclick="sendPostRequest('{{ url_for("delete_game", game_id=loop.index0) }}')"></i>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                     {% endfor %}
     
