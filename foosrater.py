@@ -26,6 +26,9 @@ class Player:
         self.name = name
         self.elo = elo
         self.games = games if games is not None else []
+        self.n_games = 0
+        self.league = "❌"
+        self.ranking = 1
     
 
     def plot_elo(self):
@@ -120,12 +123,13 @@ class League:
             cur_players.append(self.players[player_name])
         
         game_id = len(self.games)
-        game = Game(1, cur_players, red_score, blue_score, date_time)
+        game = Game(game_id, cur_players, red_score, blue_score, date_time)
 
         for player in cur_players:
-            player.games.append(game)
+            player.games.insert(0, game)
+            player.n_games = len(player.games)
             
-        self.games.append(game)
+        self.games.insert(0, game)
 
         self._update_elo()
 
@@ -147,7 +151,7 @@ class League:
             player.elo = [1000.0]
 
         # TODO: sort games on date
-        for game in reversed(self.games):
+        for game in self.games:
             # calculate proportion of red goals
             red_outcome = game.red_score / (game.red_score + game.blue_score)
             # proportions add up to 1
@@ -158,16 +162,20 @@ class League:
 
             game.abs_error = abs(expected_outcome_red - red_outcome)
 
+            game.r1_elo_delta, game.r2_elo_delta = 2 * [(red_outcome - expected_outcome_red) * K]
+            game.b1_elo_delta, game.b2_elo_delta = 2 * [(blue_outcome - expected_outcome_blue) * K]
             # TODO: these are not changed in edit yet!
-            game.R1.elo.append(game.R1.elo[-1] + (red_outcome - expected_outcome_red) * K)
-            game.R2.elo.append(game.R2.elo[-1] + (red_outcome - expected_outcome_red) * K)
-            game.B1.elo.append(game.B1.elo[-1] + (blue_outcome - expected_outcome_blue) * K)
-            game.B2.elo.append(game.B2.elo[-1] + (blue_outcome - expected_outcome_blue) * K)
+            game.R1.elo.append(game.R1.elo[-1] + game.r1_elo_delta)
+            game.R2.elo.append(game.R2.elo[-1] + game.r2_elo_delta)
+            game.B1.elo.append(game.B1.elo[-1] + game.b1_elo_delta)
+            game.B2.elo.append(game.B2.elo[-1] + game.b2_elo_delta)
+        
+        self._sort_players()
             
 
     def _sort_players(self):
 
-        self.players = dict(sorted(self.players.items(), key=lambda kv: kv[1].elo[-1]))
+        self.players = dict(reversed(sorted(self.players.items(), key=lambda kv: kv[1].elo[-1])))
         
 
     def __repr__(self):
