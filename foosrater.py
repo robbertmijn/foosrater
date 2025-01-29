@@ -30,6 +30,25 @@ class Player:
         self.league = "❌"
         self.ranking = 1
     
+    
+    def _update_league(self):
+        league_ranges = [
+                (1000, "🎷"),
+                (1050, "🛒"),
+                (1100, "🏹"),
+                (1150, "🧀"),
+                (1200, "🤖"),
+                (1250, "🗜️"), 
+                (1300, "🦒"),
+                (1350, "🦋"),
+            ]
+
+        for threshold, img in league_ranges:
+            if self.elo[-1] < threshold:
+                self.league = img
+                break
+        self.league = "❌"
+    
 
     def plot_elo(self):
         import matplotlib.pyplot as plt
@@ -128,6 +147,7 @@ class League:
         for player in cur_players:
             player.games.insert(0, game)
             player.n_games = len(player.games)
+            player._update_league()
             
         self.games.insert(0, game)
 
@@ -181,12 +201,3 @@ class League:
     def __repr__(self):
         
         return(f"{self.games}")
-    
-
-# league = League()
-# league.load_foosdat("data/foosdat_2025.csv")
-# # league.players["Robbert"].plot_elo()
-# # league.players["Robin"].plot_elo()
-# # print(league._get_ranking())
-# league._sort_players()
-# [f"{p.name}/{p.elo[-1]}" for p in league.players]
