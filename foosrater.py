@@ -3,24 +3,6 @@ from typing import List, Tuple
 import csv
 
 
-def _elo_change(expected_goals, actual_goals, k):
-    
-    return k * (actual_goals - expected_goals)
-
-def _load_team_elo(team):
-        """
-        Return mean elo, or in the case of 1v1, the elo of player 1
-        """
-
-        if "" in team: 
-            return team[0].elo[-1]
-        else:
-            return (team[0].elo[-1] + team[1].elo[-1]) / 2
-        
-
-def _expected_outcome_red(red_elo, blue_elo):
-    return 1 / (1 + 10 ** ((red_elo - blue_elo) / 400))
-
 class Player:
     def __init__(self, name: str, elo: list = [1000], games: list = None):
         self.name = name
@@ -64,6 +46,9 @@ class Player:
         return self.name
 
 
+    def _update_ranking(self):
+        pass
+
 class Game:
     def __init__(self, 
                  id: int,
@@ -100,11 +85,25 @@ class League:
         self.players = {}
         self.games = []
 
+        # Set some general parameters. Only S seems to influence prediction accuracy. Experiments showed 271 as optimum.
+        self.K = 64
+        self.S = 400
+        # self.K = 64
+        # self.S = 271
+        self.init_elo = 1000.0
+
+
     def load_foosdat(self, foosfile):
-        
+        """
+        Adds the rows of a csv as games in the league
+        order:
+        [name red1, name red2, name blue 1, name blue 2, red goals, blue goals, date]
+        """
+
         with open(foosfile, mode="r", encoding="utf-8") as file:
             games = csv.reader(file)
             for game in games:
+                print(game)
                 self.add_game([game[0], game[1], game[2], game[3]], game[4], game[5], game[6])
 
     def save_foosdat(self, foosfile):
@@ -123,7 +122,9 @@ class League:
 
 
     def add_player(self, name):
-
+        """
+        Adds a player to the league if its new
+        """
         if name not in self.players:
             self.players[name] = Player(name)
         else:
@@ -135,22 +136,26 @@ class League:
                  red_score: int, 
                  blue_score: int, 
                  date_time: datetime):
-
+        """
+        Add a new game
+        """
+        # gets players and adds them to the league if needed
         cur_players = []
         for player_name in player_names:
             self.add_player(player_name)
             cur_players.append(self.players[player_name])
         
-        game_id = len(self.games)
-        game = Game(game_id, cur_players, red_score, blue_score, date_time)
+        # initialize new game object and insert at beginning of games list        
+        game = Game(len(self.games), cur_players, red_score, blue_score, date_time)
+        self.games.insert(0, game)
 
+        # adds game to the player objects, and to the league object
         for player in cur_players:
             player.games.insert(0, game)
             player.n_games = len(player.games)
             player._update_league()
-            
-        self.games.insert(0, game)
-
+        
+        # Recalculate elo ratings
         self._update_elo()
 
 
@@ -164,27 +169,37 @@ class League:
 
 
     def _update_elo(self):
+        """
+        Recalculates elo rating by going over each game
+        """
+        K = self.K
 
-        K = 32
-
+        # Reset each players' rating, initialize a list starting with the init_elo (1000)
         for player in self.players.values():
-            player.elo = [1000.0]
+            player.elo = [self.init_elo]
 
         # TODO: sort games on date
         for game in self.games:
             # calculate proportion of red goals
-            red_outcome = game.red_score / (game.red_score + game.blue_score)
+            game.red_outcome = game.red_score / (game.red_score + game.blue_score)
             # proportions add up to 1
-            blue_outcome = 1 - red_outcome
+            game.blue_outcome = 1 - game.red_outcome
 
-            expected_outcome_red = _expected_outcome_red(game.red_team_elo, game.blue_team_elo)
-            expected_outcome_blue = 1 - expected_outcome_red
+            game.expected_outcome_red = _expected_outcome_red(game.red_team_elo[0], game.blue_team_elo[0], self.S)
+            game.expected_outcome_blue = 1 - game.expected_outcome_red
 
-            game.abs_error = abs(expected_outcome_red - red_outcome)
+            game.abs_error = abs(game.expected_outcome_red - game.red_outcome)
 
-            game.r1_elo_delta, game.r2_elo_delta = 2 * [(red_outcome - expected_outcome_red) * K]
-            game.b1_elo_delta, game.b2_elo_delta = 2 * [(blue_outcome - expected_outcome_blue) * K]
-            # TODO: these are not changed in edit yet!
+            game.r1_elo_delta = (game.red_outcome - game.expected_outcome_red) * K
+            game.r2_elo_delta = (game.red_outcome - game.expected_outcome_red) * K
+            game.b1_elo_delta = (game.blue_outcome - game.expected_outcome_blue) * K
+            game.b2_elo_delta = (game.blue_outcome - game.expected_outcome_blue) * K
+            
+            game.r1_elo = game.R1.elo[-1]
+            game.r2_elo = game.R2.elo[-1]
+            game.b1_elo = game.B1.elo[-1]
+            game.b2_elo = game.B2.elo[-1]
+
             game.R1.elo.append(game.R1.elo[-1] + game.r1_elo_delta)
             game.R2.elo.append(game.R2.elo[-1] + game.r2_elo_delta)
             game.B1.elo.append(game.B1.elo[-1] + game.b1_elo_delta)
@@ -194,10 +209,30 @@ class League:
             
 
     def _sort_players(self):
-
+        """
+        Sort player list based on their latest elo rating
+        """
         self.players = dict(reversed(sorted(self.players.items(), key=lambda kv: kv[1].elo[-1])))
-        
+        for rank, player in enumerate(self.players.values()):
+            player.ranking = rank + 1
 
     def __repr__(self):
         
         return(f"{self.games}")
+
+def _load_team_elo(team):
+    """
+    Return mean elo, or in the case of 1v1, the elo of player 1
+    Also returns the mean number of games each team has played earlier
+    """
+    if "" in [p.name for p in team]: 
+        return team[0].elo[-1], len(team[0].games)
+    else:
+        return (team[0].elo[-1] + team[1].elo[-1]) / 2, (len(team[0].games) + len(team[1].games)) / 2
+        
+
+def _expected_outcome_red(red_elo, blue_elo, S: int=400):
+    """
+    Returns expected proportion of goals the read team will make
+    """
+    return 1 / (1 + 10 ** ((blue_elo - red_elo) / S))

@@ -17,6 +17,7 @@ def index(league):
 
     data = os.path.join(DATA_FOLDER, league + ".csv")
     league = League()
+    print(data)
     league.load_foosdat(data)
     
     if request.method == 'POST':
