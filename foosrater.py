@@ -4,6 +4,7 @@ import csv
 
 
 class Player:
+
     def __init__(self, name: str, elo: list = [1000], games: list = None):
         self.name = name
         self.elo = elo
@@ -45,9 +46,6 @@ class Player:
     def __repr__(self):
         return self.name
 
-
-    def _update_ranking(self):
-        pass
 
 class Game:
     def __init__(self, 
@@ -103,8 +101,8 @@ class League:
         with open(foosfile, mode="r", encoding="utf-8") as file:
             games = csv.reader(file)
             for game in games:
-                print(game)
                 self.add_game([game[0], game[1], game[2], game[3]], game[4], game[5], game[6])
+
 
     def save_foosdat(self, foosfile):
         
@@ -121,6 +119,21 @@ class League:
             writer.writerows(foosdat)
 
 
+    def edit_game(self, 
+                  game_index: int,
+                  player_names: list, 
+                  red_score: int, 
+                  blue_score: int, 
+                  date_time: datetime):
+        """
+        Overwrites the game in the passed index with a new one.
+        """
+        if 0 <= game_index < len(self.games):
+            self.add_game(player_names, red_score, blue_score, date_time, game_index)
+        else:
+            print("Invalid game index")
+
+
     def add_player(self, name):
         """
         Adds a player to the league if its new
@@ -135,7 +148,8 @@ class League:
                  player_names: list, 
                  red_score: int, 
                  blue_score: int, 
-                 date_time: datetime):
+                 date_time: datetime, 
+                 insert: int = 0):
         """
         Add a new game
         """
@@ -147,25 +161,16 @@ class League:
         
         # initialize new game object and insert at beginning of games list        
         game = Game(len(self.games), cur_players, red_score, blue_score, date_time)
-        self.games.insert(0, game)
+        self.games.insert(insert, game)
 
         # adds game to the player objects, and to the league object
         for player in cur_players:
-            player.games.insert(0, game)
+            player.games.insert(insert, game)
             player.n_games = len(player.games)
             player._update_league()
         
         # Recalculate elo ratings
         self._update_elo()
-
-
-    def edit_game(self, game_index: int, red_score: int, blue_score: int):
-        if 0 <= game_index < len(self.games):
-            # TODO: edit date_time
-            self.games[game_index].red_score = red_score
-            self.games[game_index].blue_score = blue_score
-        else:
-            print("Invalid game index")
 
 
     def _update_elo(self):
@@ -212,13 +217,18 @@ class League:
         """
         Sort player list based on their latest elo rating
         """
+
+        # Sort the dict
         self.players = dict(reversed(sorted(self.players.items(), key=lambda kv: kv[1].elo[-1])))
+        
+        # Based on position in the new dict, set ranking
         for rank, player in enumerate(self.players.values()):
             player.ranking = rank + 1
 
     def __repr__(self):
         
         return(f"{self.games}")
+
 
 def _load_team_elo(team):
     """
