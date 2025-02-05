@@ -11,26 +11,27 @@ class Player:
         self.games = games if games is not None else []
         self.n_games = 0
         self.league = "❌"
-        self.ranking = 1
+        self.ranking = 0
     
     
     def _update_league(self):
         league_ranges = [
-                (1000, "🎷"),
-                (1050, "🛒"),
-                (1100, "🏹"),
-                (1150, "🧀"),
-                (1200, "🤖"),
-                (1250, "🗜️"), 
-                (1300, "🦒"),
-                (1350, "🦋"),
+                (800, "🎷"),
+                (850, "🛒"),
+                (900, "🏹"),
+                (950, "🧀"),
+                (1000, "🤖"),
+                (1050, "🗜️"), 
+                (1100, "🦒"),
+                (1150, "🦋"),
             ]
 
         for threshold, img in league_ranges:
             if self.elo[-1] < threshold:
                 self.league = img
                 break
-        self.league = "❌"
+            else:
+                self.league = "❌"
     
 
     def plot_elo(self):
@@ -84,10 +85,10 @@ class League:
         self.games = []
 
         # Set some general parameters. Only S seems to influence prediction accuracy. Experiments showed 271 as optimum.
-        self.K = 64
-        self.S = 400
         # self.K = 64
-        # self.S = 271
+        # self.S = 400
+        self.K = 100
+        self.S = 271
         self.init_elo = 1000.0
 
 
@@ -163,15 +164,15 @@ class League:
         game = Game(len(self.games), cur_players, red_score, blue_score, date_time)
         self.games.insert(insert, game)
 
+        # Recalculate elo ratings
+        self._update_elo()
+        
         # adds game to the player objects, and to the league object
         for player in cur_players:
             player.games.insert(insert, game)
             player.n_games = len(player.games)
             player._update_league()
         
-        # Recalculate elo ratings
-        self._update_elo()
-
 
     def _update_elo(self):
         """
@@ -222,8 +223,13 @@ class League:
         self.players = dict(reversed(sorted(self.players.items(), key=lambda kv: kv[1].elo[-1])))
         
         # Based on position in the new dict, set ranking
-        for rank, player in enumerate(self.players.values()):
-            player.ranking = rank + 1
+        rank = 1
+        for player in self.players.values():
+            if player.n_games > 3:
+                player.ranking = rank
+                rank += 1
+            else:
+                player.ranking = 0
 
     def __repr__(self):
         

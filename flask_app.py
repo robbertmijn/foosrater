@@ -11,11 +11,12 @@ app = Flask(__name__)
 
 DATA_FOLDER = 'data'
 DATA = os.path.join(DATA_FOLDER, "foosdat_2025.csv")
+LEAGUE = "foosdat_2025"
 
-@app.route('/<league>', methods=['GET', 'POST'])
-def index(league):
+@app.route('/<league_name>', methods=['GET', 'POST'])
+def index(league_name=LEAGUE):
 
-    data = os.path.join(DATA_FOLDER, league + ".csv")
+    data = os.path.join(DATA_FOLDER, league_name + ".csv")
     league = League()
     league.load_foosdat(data)
     
@@ -34,7 +35,7 @@ def index(league):
         return redirect(url_for('index'))
     
     games = [game.__dict__ for game in league.games]
-    players = [player.__dict__ for player in league.players.values()]
+    players = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games > 3]
                 
     return render_template('index.html', players=players, games=games)
 
