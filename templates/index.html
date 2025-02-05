@@ -159,14 +159,22 @@
                 </div>
                 <div class="modal-body">
                     <ul class="list-group">
-                        {% for player in players %}
+                        {% for player in players_ranked %}
                             <li class="list-group-item d-flex">
-                                {{ player.ranking }}.&nbsp;<span data-toggle="modal" data-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;(elo: {{ player.elo[-1] | round(1) }}, {{ player.n_games }} games, {{ player.league }} league)
+                                {{ player.ranking }}.&nbsp;<span data-toggle="modal" data-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;(elo: {{ player.elo[-1] | int }}, {{ player.n_games }} games, {{ player.league }} league)
+                            </li>
+                        {% endfor %}
+                        {% for player in players_unranked %}
+                            <li class="list-group-item d-flex">
+                                #.&nbsp;<span data-toggle="modal" data-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;(elo: {{ player.elo[-1] | int }}, {{ player.n_games }} games, {{ player.league }} league)
                             </li>
                         {% endfor %}
 
                         <datalist id="suggestionsList">
-                            {% for player in players %}
+                            {% for player in players_ranked %}
+                            <option value="{{ player.name }}"">
+                            {% endfor %}
+                            {% for player in players_unranked %}
                             <option value="{{ player.name }}"">
                             {% endfor %}
                         </datalist>

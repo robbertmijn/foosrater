@@ -225,7 +225,7 @@ class League:
         # Based on position in the new dict, set ranking
         rank = 1
         for player in self.players.values():
-            if player.n_games > 3:
+            if player.n_games >= 3:
                 player.ranking = rank
                 rank += 1
             else:

@@ -35,9 +35,10 @@ def index(league_name=LEAGUE):
         return redirect(url_for('index'))
     
     games = [game.__dict__ for game in league.games]
-    players = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games > 3]
+    players_ranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games >= 3]
+    players_unranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games <= 2]
                 
-    return render_template('index.html', players=players, games=games)
+    return render_template('index.html', players_ranked=players_ranked, players_unranked=players_unranked, games=games)
 
 
 @app.route('/edit_game/<int:game_id>', methods=['GET', 'POST'])
