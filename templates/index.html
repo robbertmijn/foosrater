@@ -14,8 +14,6 @@
             <div class="col-auto">
                 <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay1">Ranking</button>
                 <button class="btn btn-dark mx-2" data-toggle="modal" data-target="#overlay2">Add game</button>
-                <a class="btn btn-dark" target="_blank" href="{{ url_for('player_stats') }}">Score Graph</a>
-                <a class="btn btn-dark" target="_blank" href="{{ url_for('social_graph') }}">Network</a>
                 <a class="btn btn-dark" target="_blank" href="https://github.com/robbertmijn/foosrater"><i class="fab fa-github"></i></a>
             </div>
         </div>
@@ -74,9 +72,9 @@
                         <td class="actions">
                             <div class="action-icons">
                                 <i class="fas fa-pencil-alt" style="cursor: pointer;" 
-                                onclick="window.location.href='{{ url_for("edit_game", game_id=loop.index0) }}'"></i>
+                                onclick="window.location.href='{{ url_for("edit_game", league_name=league_name, game_id=loop.index0) }}'"></i>
                                 <i class="fas fa-trash" style="cursor: pointer;" 
-                                onclick="sendPostRequest('{{ url_for("delete_game", game_id=loop.index0) }}')"></i>
+                                onclick="sendPostRequest('{{ url_for("delete_game", league_name=league_name,  game_id=loop.index0) }}')"></i>
                             </div>
                         </td>
                     </tr>
@@ -100,7 +98,7 @@
                     <form method="POST" id="foosform">
                         <label for="red-team" class="form-label">Red Team:</label>
                         <div class="input-group mb-3">
-                            <select class="form-select" aria-label="Default select example" id="red_goals" name="red_goals">
+                            <select class="form-select" aria-label="Default select example" id="red_score" name="red_score">
                                 <option value=0>0</option>
                                 <option value=1>1</option>
                                 <option value=2>2</option>
@@ -119,7 +117,7 @@
                         </div>
                         <label for="blue-team" class="form-label">Blue Team:</label>
                         <div class="input-group mb-3">
-                            <select class="form-select" aria-label="Default select example" id="blue_goals" name="blue_goals">
+                            <select class="form-select" aria-label="Default select example" id="blue_score" name="blue_score">
                                 <option value=0>0</option>
                                 <option value=1>1</option>
                                 <option value=2>2</option>
@@ -210,8 +208,8 @@
     <script>
         document.getElementById('date').valueAsDate = new Date();
         document.getElementById('foosform').addEventListener('submit', function(event) {
-            const dropdown1 = parseInt(document.getElementById('blue_goals').value);
-            const dropdown2 = parseInt(document.getElementById('red_goals').value);
+            const dropdown1 = parseInt(document.getElementById('blue_score').value);
+            const dropdown2 = parseInt(document.getElementById('red_score').value);
             const sum = dropdown1 + dropdown2;
 
             if (sum < 1) {

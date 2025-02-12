@@ -121,11 +121,11 @@ class League:
 
 
     def edit_game(self, 
-                  game_index: int,
                   player_names: list, 
                   red_score: int, 
                   blue_score: int, 
-                  date_time: datetime):
+                  date_time: datetime, 
+                  game_index: int):
         """
         Overwrites the game in the passed index with a new one.
         """
@@ -163,7 +163,7 @@ class League:
         # initialize new game object and insert at beginning of games list        
         game = Game(len(self.games), cur_players, red_score, blue_score, date_time)
         self.games.insert(insert, game)
-
+        
         # Recalculate elo ratings
         self._update_elo()
         

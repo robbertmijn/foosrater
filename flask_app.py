@@ -10,89 +10,68 @@ from foosrater import League
 app = Flask(__name__)
 
 DATA_FOLDER = 'data'
-DATA = os.path.join(DATA_FOLDER, "foosdat_2025.csv")
-LEAGUE = "foosdat_2025"
 
 @app.route('/<league_name>', methods=['GET', 'POST'])
-def index(league_name=LEAGUE):
+def index(league_name):
 
     data = os.path.join(DATA_FOLDER, league_name + ".csv")
     league = League()
     league.load_foosdat(data)
     
     if request.method == 'POST':
-         
+        print(request.form) 
         league.add_game(
-            request.form['red_player1'].strip(), 
-            request.form['red_player2'].strip(), 
-            request.form['blue_player1'].strip(), 
-            request.form['blue_player2'].strip(), 
-            request.form['red_goals'], 
-            request.form['blue_goals'], 
-            request.form['date']
+            [request.form['red_player1'].strip(), request.form['red_player2'].strip(), request.form['blue_player1'].strip(), request.form['blue_player2'].strip()], 
+            request.form['red_score'], 
+            request.form['blue_score'], 
+            request.form['date'],
+            len(league.games)
         )
         
-        return redirect(url_for('index'))
+        league.save_foosdat(data)
+        
+        return redirect(url_for('index', league_name=league_name))
     
+    # extract games and player dicts to send to HTML
     games = [game.__dict__ for game in league.games]
     players_ranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games >= 3]
     players_unranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games <= 2]
                 
-    return render_template('index.html', players_ranked=players_ranked, players_unranked=players_unranked, games=games)
+    return render_template('index.html', players_ranked=players_ranked, players_unranked=players_unranked, games=games, league_name=league_name)
 
 
-@app.route('/edit_game/<int:game_id>', methods=['GET', 'POST'])
-def edit_game(game_id):
-    games = load_data(GAMES_FILE)
-    game = games[-(game_id+1)]
+@app.route('/<league_name>/edit_game/<int:game_id>', methods=['GET', 'POST'])
+def edit_game(league_name, game_id):
+    
+    data = os.path.join(DATA_FOLDER, league_name + ".csv")
+    league = League()
+    league.load_foosdat(data)
+    
+    game = league.games[game_id]
+    
     if request.method == 'POST':
 
-        game['red_player1'] = request.form['red_player1'].strip()
-        game['red_player2'] = request.form['red_player2'].strip()
-        game['blue_player1'] = request.form['blue_player1'].strip()
-        game['blue_player2'] = request.form['blue_player2'].strip()
-        game['blue_goals'] = request.form['blue_goals']
-        game['red_goals'] = request.form['red_goals']
-        game['date'] = request.form['date']
+        league.edit_game(
+            [request.form['red_player1'].strip(), request.form['red_player2'].strip(), request.form['blue_player1'].strip(), request.form['blue_player2'].strip()], 
+            request.form['red_score'], 
+            request.form['blue_score'], 
+            request.form['date'],
+            game_id
+        )
+        
+        league.save_foosdat(data)
 
-        save_data(games, GAMES_FILE)
-        add_new_players(game)
-        update_elo_ratings()
-        return redirect(url_for('index'))
-    return render_template('edit_game.html', game=game, game_id=game_id)
+        return redirect(url_for('index', league_name=league_name))
+    
+    return render_template('edit_game.html', game=game, game_id=game_id, league_name=league_name)
 
 
-@app.route('/delete_game/<int:game_id>', methods=['POST'])
-def delete_game(game_id):
-    games = load_data(GAMES_FILE)
-    games.pop(-(game_id+1))
-    save_data(games, GAMES_FILE)
-    update_elo_ratings()
+@app.route('/<league_name>/delete_game/<int:game_id>', methods=['POST'])
+def delete_game(league_name, game_id):
+
+    
+    
     return redirect(url_for('index'))
-
-
-@app.route('/social_graph')
-def social_graph():
-    
-    social_graph = make_social_graph(GAMES_FILE)
-        
-    return render_template('social_graph.html', social_graph=social_graph)
-
-
-@app.route('/player_stats')
-def player_stats():
-    
-    # player_stats = make_player_stats(GAMES_FILE)
-        
-    return render_template('player_stats.html', player_stats=player_stats)
-
-
-@app.route('/player_matrix')
-def player_matrix():
-    
-    # players, matchups, counts = make_player_matrix(GAMES_FILE)
-        
-    return render_template('player_matrix.html', players=players, matchups=matchups, player_game_counts=counts)
 
 
 @app.route('/player/<string:player>')
