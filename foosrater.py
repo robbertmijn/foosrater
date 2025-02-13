@@ -164,6 +164,8 @@ class League:
         game = Game(len(self.games), cur_players, red_score, blue_score, date_time)
         self.games.insert(insert, game)
         
+        self._sort_games()
+        
         # Recalculate elo ratings
         self._update_elo()
         
@@ -230,6 +232,15 @@ class League:
                 rank += 1
             else:
                 player.ranking = 0
+    
+    def _sort_games(self):
+        """
+        Sort games list based on date
+        """
+        # Sort the dict
+        # print(list(reversed(sorted(self.games, key=lambda game: game.date_time))))
+        self.games = list(reversed(sorted(self.games, key=lambda game: game.date_time)))
+    
 
     def __repr__(self):
         
