@@ -95,50 +95,38 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
                     <form method="POST" id="foosform">
+                        {{ form.hidden_tag() }}
+            
                         <label for="red-team" class="form-label">Red Team:</label>
                         <div class="input-group mb-3">
-                            <select class="form-select" aria-label="Default select example" id="red_score" name="red_score">
-                                <option value=0>0</option>
-                                <option value=1>1</option>
-                                <option value=2>2</option>
-                                <option value=3>3</option>
-                                <option value=4>4</option>
-                                <option value=5>5</option>
-                                <option value=6>6</option>
-                                <option value=7>7</option>
-                                <option value=8>8</option>
-                                <option value=9>9</option>
-                                <option value=10>10</option>
-                              </select>
-
-                                <input list="suggestionsList" id="red_player1" name="red_player1" class="form-control" required placeholder="Player 1" aria-label="Player 1">
-                                <input list="suggestionsList" id="red_player2" name="red_player2" class="form-control" placeholder="Player 2" aria-label="Player 2">
+                            {{ form.red_score(class="form-select", id="red_score") }}
+                            {{ form.player_red1(class="form-control", placeholder="Player 1", required=True, list="suggestionsList") }}
+                            {{ form.player_red2(class="form-control", placeholder="Player 2", list="suggestionsList") }}
                         </div>
+            
                         <label for="blue-team" class="form-label">Blue Team:</label>
                         <div class="input-group mb-3">
-                            <select class="form-select" aria-label="Default select example" id="blue_score" name="blue_score">
-                                <option value=0>0</option>
-                                <option value=1>1</option>
-                                <option value=2>2</option>
-                                <option value=3>3</option>
-                                <option value=4>4</option>
-                                <option value=5>5</option>
-                                <option value=6>6</option>
-                                <option value=7>7</option>
-                                <option value=8>8</option>
-                                <option value=9>9</option>
-                                <option value=10>10</option>
-                              </select>
-                              <input list="suggestionsList" id="blue_player1" name="blue_player1" class="form-control" required placeholder="Player 1" aria-label="Player 1">
-                              <input list="suggestionsList" id="blue_player2" name="blue_player2" class="form-control" placeholder="Player 2" aria-label="Player 2">
-                            </div>
-                        <div class="form-group">
-                            <label for="date">Date:</label>
-                            <input type="date" id="date" name="date" class="form-control" required>
+                            {{ form.blue_score(class="form-select", id="blue_score") }}
+                            {{ form.player_blue1(class="form-control", placeholder="Player 1", required=True, list="suggestionsList") }}
+                            {{ form.player_blue2(class="form-control", placeholder="Player 2", list="suggestionsList") }}
                         </div>
+            
+                        <div class="form-group mb-3">
+                            <label for="date">Date & Time:</label>
+                            {{ form.date_time(class="form-control", type="datetime-local", required=True, id="date") }}
+                        </div>
+            
                         <div id="error-message" class="text-danger mb-3" style="display: none;">At least one goal must be made!</div>
-                        <button type="submit" class="btn btn-primary w-100">Add Game</button>
+            
+                        <button type="submit" class="btn btn-primary w-100">{{ form.submit.label }}</button>
                     </form>
                     
                 </div>
@@ -206,6 +194,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let now = new Date();
+
+            // Set date field (YYYY-MM-DD)
+            let dateField = document.getElementById('date');
+            let year = now.getFullYear();
+            let month = String(now.getMonth() + 1).padStart(2, '0');
+            let day = String(now.getDate()).padStart(2, '0');
+            let hours = String(now.getHours()).padStart(2, '0');
+            let minutes = String(now.getMinutes()).padStart(2, '0');
+            let dateTimeField = document.getElementById('date_time');
+            if (dateTimeField) {
+                dateTimeField.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            }
+        });
         document.getElementById('date').valueAsDate = new Date();
         document.getElementById('foosform').addEventListener('submit', function(event) {
             const dropdown1 = parseInt(document.getElementById('blue_score').value);

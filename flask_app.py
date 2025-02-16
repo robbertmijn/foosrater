@@ -1,4 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, redirect, url_for, jsonify, request
+from forms import GameResultForm  # Import your form
+from flask_wtf.csrf import CSRFProtect
+
 import json
 import os
 # from elo import update_elo_ratings, calculate_elo_change
@@ -8,6 +11,8 @@ import os
 from foosrater import League
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a secure secret key
+csrf = CSRFProtect(app)
 
 DATA_FOLDER = 'data'
 
@@ -17,16 +22,26 @@ def index(league_name):
     data = os.path.join(DATA_FOLDER, league_name + ".csv")
     league = League()
     league.load_foosdat(data)
+    form = GameResultForm()
     
     if request.method == 'POST':
-        print(request.form) 
-        league.add_game(
-            [request.form['red_player1'].strip(), request.form['red_player2'].strip(), request.form['blue_player1'].strip(), request.form['blue_player2'].strip()], 
-            request.form['red_score'], 
-            request.form['blue_score'], 
-            request.form['date'],
-            len(league.games)
-        )
+        red_score = form.red_score.data
+        blue_score = form.blue_score.data
+        R1_name = form.player_red1.data
+        R2_name = form.player_red2.data
+        B1_name = form.player_blue1.data
+        B2_name = form.player_blue2.data
+        date_time = form.date_time.data
+
+        league.add_game([R1_name, R2_name, B1_name, B2_name], red_score, blue_score, date_time)
+        
+        # league.add_game(
+        #     [request.form['red_player1'].strip(), request.form['red_player2'].strip(), request.form['blue_player1'].strip(), request.form['blue_player2'].strip()], 
+        #     request.form['red_score'], 
+        #     request.form['blue_score'], 
+        #     request.form['date'],
+        #     len(league.games)
+        # )
         
         league.save_foosdat(data)
         
@@ -37,7 +52,7 @@ def index(league_name):
     players_ranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games >= 3]
     players_unranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games <= 2]
                 
-    return render_template('index.html', players_ranked=players_ranked, players_unranked=players_unranked, games=games, league_name=league_name)
+    return render_template('index.html', players_ranked=players_ranked, players_unranked=players_unranked, games=games, league_name=league_name, form=form)
 
 
 @app.route('/<league_name>/edit_game/<int:game_id>', methods=['GET', 'POST'])

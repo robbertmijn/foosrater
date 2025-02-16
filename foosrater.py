@@ -67,7 +67,7 @@ class Game:
         self.b2_elo_delta = 0
         self.red_score = int(red_score)
         self.blue_score = int(blue_score)
-        self.date_time = date_time
+        self.date_time = date_time if isinstance(date_time, datetime) else datetime.strptime(date_time, "%Y-%m-%d %H:%M")
         self.red_team_elo = _load_team_elo((self.R1, self.R2))
         self.blue_team_elo = _load_team_elo((self.B1, self.B2))
         self.abs_error = 0
@@ -238,8 +238,8 @@ class League:
         Sort games list based on date
         """
         # Sort the dict
-        # print(list(reversed(sorted(self.games, key=lambda game: game.date_time))))
         self.games = list(reversed(sorted(self.games, key=lambda game: game.date_time)))
+        
     
 
     def __repr__(self):
