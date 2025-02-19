@@ -19,7 +19,7 @@ for game in games:
                     game["blue_player2"],
                     game["red_goals"],
                     game["blue_goals"],
-                    game["date"] + "T00:00",
+                    game["date"] + "T00:00:00",
                     ])
     
 # create new league

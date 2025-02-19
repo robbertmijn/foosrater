@@ -121,10 +121,11 @@ class League:
             writer = csv.writer(file)
             writer.writerow(["R1", "R2", "B1", "B2", "red_score", "blue_score", "date_time"])
             for game in self.games:
-                writer.writerows([game.R1.name, game.R2.name, game.B1.name, game.B2.name],
+
+                writer.writerow([game.R1.name, game.R2.name, game.B1.name, game.B2.name,
                                  game.red_score, 
                                  game.blue_score, 
-                                 game.date_time.strftime("%Y-%m-%d %H:%M"))
+                                 game.date_time.strftime("%Y-%m-%dT%H:%M:%S")])
 
 
     def edit_game(self, 
@@ -169,7 +170,7 @@ class League:
             cur_players.append(self.players[player_name])
         
         # initialize new game object and insert at beginning of games list
-        date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
+        date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M:%S")
         game = Game(len(self.games), cur_players, red_score, blue_score, date_time)
         self.games.insert(insert, game)
         

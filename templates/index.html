@@ -135,7 +135,7 @@
                             </div>
                         <div class="form-group">
                             <label for="date">Date:</label>
-                            <input type="datetime-local" id="date_time" name="date_time" class="form-control" required>
+                            <input type="datetime-local" id="date_time" name="date_time" class="form-control" step="1" required>
                         </div>
                         <div id="error-message" class="text-danger mb-3" style="display: none;">At least one goal must be made!</div>
                         <button type="submit" class="btn btn-primary w-100">Add Game</button>
@@ -209,7 +209,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        document.getElementById('date_time').value = new Date().toISOString().slice(0, 16);
+        document.getElementById('date_time').value = new Date().toISOString().slice(0, 19);
         document.getElementById('foosform').addEventListener('submit', function(event) {
             const dropdown1 = parseInt(document.getElementById('blue_score').value);
             const dropdown2 = parseInt(document.getElementById('red_score').value);
