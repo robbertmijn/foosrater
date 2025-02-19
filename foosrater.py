@@ -98,11 +98,13 @@ class League:
         order:
         [name red1, name red2, name blue 1, name blue 2, red goals, blue goals, date]
         """
-
         with open(foosfile, mode="r", encoding="utf-8") as file:
-            games = csv.reader(file)
+            games = csv.DictReader(file)
             for game in games:
-                self.add_game([game[0], game[1], game[2], game[3]], game[4], game[5], game[6])
+                self.add_game([game["R1"], game["R2"], game["B1"], game["B2"]], 
+                              game["red_score"], 
+                              game["blue_score"], 
+                              game["date"])
 
 
     def save_foosdat(self, foosfile):
@@ -117,6 +119,7 @@ class League:
 
         with open(foosfile, mode="w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
+            writer.writerow(["R1", "R2", "B1", "B2", "red_score", "blue_score", "date"])
             writer.writerows(foosdat)
 
 
@@ -130,7 +133,8 @@ class League:
         Overwrites the game in the passed index with a new one.
         """
         if 0 <= game_index < len(self.games):
-            self.add_game(player_names, red_score, blue_score, date_time, game_index)
+            self.games.pop(game_index)
+            self.add_game(player_names, red_score, blue_score, date_time, game_index+1)
         else:
             print("Invalid game index")
 
@@ -233,6 +237,7 @@ class League:
             else:
                 player.ranking = 0
     
+    
     def _sort_games(self):
         """
         Sort games list based on date
@@ -243,7 +248,6 @@ class League:
         for game, game_id in zip(self.games, game_ids):
             game.id = game_id
             
-    
 
     def __repr__(self):
         
