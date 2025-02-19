@@ -99,28 +99,32 @@ class League:
         [name red1, name red2, name blue 1, name blue 2, red goals, blue goals, date]
         """
         with open(foosfile, mode="r", encoding="utf-8") as file:
-            games = csv.DictReader(file)
-            for game in games:
+            game_rows = csv.DictReader(file)
+            for game in game_rows:
                 self.add_game([game["R1"], game["R2"], game["B1"], game["B2"]], 
                               game["red_score"], 
                               game["blue_score"], 
-                              game["date"])
+                              game["date_time"])
 
 
     def save_foosdat(self, foosfile):
         
-        foosdat = []
-        for game in self.games:
-            players = [game.R1.name, game.R2.name, game.B1.name, game.B2.name]
-            foosdat.append([players + 
-                           [game.red_score] + 
-                           [game.blue_score] + 
-                           [game.date_time]][0])
+        # foosdat = []
+        # for game in self.games:
+        #     players = [game.R1.name, game.R2.name, game.B1.name, game.B2.name]
+        #     foosdat.append([players + 
+        #                    [game.red_score] + 
+        #                    [game.blue_score] + 
+        #                    [game.date_time]][0])
 
         with open(foosfile, mode="w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
-            writer.writerow(["R1", "R2", "B1", "B2", "red_score", "blue_score", "date"])
-            writer.writerows(foosdat)
+            writer.writerow(["R1", "R2", "B1", "B2", "red_score", "blue_score", "date_time"])
+            for game in self.games:
+                writer.writerows([game.R1.name, game.R2.name, game.B1.name, game.B2.name],
+                                 game.red_score, 
+                                 game.blue_score, 
+                                 game.date_time.strftime("%Y-%m-%d %H:%M"))
 
 
     def edit_game(self, 
@@ -153,7 +157,7 @@ class League:
                  player_names: list, 
                  red_score: int, 
                  blue_score: int, 
-                 date_time: datetime, 
+                 date_time_str: str, 
                  insert: int = 0):
         """
         Add a new game
@@ -164,7 +168,8 @@ class League:
             self.add_player(player_name)
             cur_players.append(self.players[player_name])
         
-        # initialize new game object and insert at beginning of games list        
+        # initialize new game object and insert at beginning of games list
+        date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
         game = Game(len(self.games), cur_players, red_score, blue_score, date_time)
         self.games.insert(insert, game)
         

@@ -23,7 +23,7 @@ def index(league_name):
             [request.form['red_player1'].strip(), request.form['red_player2'].strip(), request.form['blue_player1'].strip(), request.form['blue_player2'].strip()], 
             request.form['red_score'], 
             request.form['blue_score'], 
-            request.form['date'],
+            request.form['date_time'],
             len(league.games)
         )
         
@@ -48,7 +48,7 @@ def create_league(league_name):
         # Create the file with headers
         with open(league_data, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(["R1", "R2", "B1", "B2", "red_score", "blue_score", "date"])
+            writer.writerow(["R1", "R2", "B1", "B2", "red_score", "blue_score", "date_time"])
     
     return redirect(url_for('index', league_name=league_name))
             
@@ -68,7 +68,7 @@ def edit_game(league_name, game_id):
             [request.form['red_player1'].strip(), request.form['red_player2'].strip(), request.form['blue_player1'].strip(), request.form['blue_player2'].strip()], 
             request.form['red_score'], 
             request.form['blue_score'], 
-            request.form['date'],
+            request.form['date_time'],
             game_id
         )
         
