@@ -109,14 +109,6 @@ class League:
 
     def save_foosdat(self, foosfile):
         
-        # foosdat = []
-        # for game in self.games:
-        #     players = [game.R1.name, game.R2.name, game.B1.name, game.B2.name]
-        #     foosdat.append([players + 
-        #                    [game.red_score] + 
-        #                    [game.blue_score] + 
-        #                    [game.date_time]][0])
-
         with open(foosfile, mode="w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(["R1", "R2", "B1", "B2", "red_score", "blue_score", "date_time"])

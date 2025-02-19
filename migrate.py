@@ -10,7 +10,7 @@ def load_json_data(file_path):
     return []
 
 
-games = load_json_data("data/games_2024.json")
+games = load_json_data("data/games.json")
 foosdat = []
 for game in games:
     foosdat.append([game["red_player1"],
@@ -24,7 +24,7 @@ for game in games:
     
 # create new league
 DATA_FOLDER = "data"
-league_name = "foosdat_2024"
+league_name = "foosdat_all"
 league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
 
 with open(league_data, mode="w", newline="", encoding="utf-8") as file:

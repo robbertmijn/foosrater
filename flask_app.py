@@ -56,9 +56,9 @@ def create_league(league_name):
 @app.route('/<league_name>/edit_game/<int:game_id>', methods=['GET', 'POST'])
 def edit_game(league_name, game_id):
     
-    data = os.path.join(DATA_FOLDER, league_name + ".csv")
+    league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
     league = League()
-    league.load_foosdat(data)
+    league.load_foosdat(league_data)
     
     game = league.games[game_id]
     
@@ -72,7 +72,7 @@ def edit_game(league_name, game_id):
             game_id
         )
         
-        league.save_foosdat(data)
+        league.save_foosdat(league_data)
 
         return redirect(url_for('index', league_name=league_name))
     
@@ -82,10 +82,16 @@ def edit_game(league_name, game_id):
 @app.route('/<league_name>/delete_game/<int:game_id>', methods=['POST'])
 def delete_game(league_name, game_id):
 
-    # TODO
+    league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
+    league = League()
+    league.load_foosdat(league_data)
     
-    return redirect(url_for('index'))
-
+    league.games.pop(game_id)
+    
+    league.save_foosdat(league_data)
+    
+    return redirect(url_for('index', league_name=league_name))
+    
 
 @app.route('/player/<string:player>')
 def player_profile(player):
@@ -94,16 +100,6 @@ def player_profile(player):
     # print(data)
     
     return jsonify(data)
-
-
-@app.route('/clean_db')
-def clean_db():
-    
-    # players = load_data(PLAYERS_FILE)
-    # players = [player for player in players if player["games"] >= 1]
-    # save_data(players, PLAYERS_FILE)
-    
-    return redirect(url_for("index"))
 
 
 if __name__ == '__main__':
