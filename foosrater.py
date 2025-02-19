@@ -87,7 +87,7 @@ class League:
         # Set some general parameters. Only S seems to influence prediction accuracy. Experiments showed 271 as optimum.
         # self.K = 64
         # self.S = 400
-        self.K = 100
+        self.K = 64
         self.S = 271
         self.init_elo = 1000.0
 
@@ -100,7 +100,9 @@ class League:
         """
         with open(foosfile, mode="r", encoding="utf-8") as file:
             game_rows = csv.DictReader(file)
+            print(game_rows)
             for game in game_rows:
+                print(game)
                 self.add_game([game["R1"], game["R2"], game["B1"], game["B2"]], 
                               game["red_score"], 
                               game["blue_score"], 

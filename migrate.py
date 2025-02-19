@@ -24,20 +24,10 @@ for game in games:
     
 # create new league
 DATA_FOLDER = "data"
-league_name = "foosdat_all"
+league_name = "foosdat"
 league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
 
 with open(league_data, mode="w", newline="", encoding="utf-8") as file:
     writer = csv.writer(file)
     writer.writerow(["R1", "R2", "B1", "B2", "red_score", "blue_score", "date_time"])
     writer.writerows(foosdat)
-
-# with open("data/foosdat_2025.csv", mode="r", encoding="utf-8") as file:
-#     reader = csv.reader(file)
-#     for row in reader:
-#         print(row)
-
-# league = fr.League()
-# league.load_foosdat("foosrater/data/foosdat.csv")
-
-# league.save_foosdat("data/foosdat_2024.csv")
