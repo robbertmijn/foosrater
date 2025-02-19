@@ -11,6 +11,11 @@ app = Flask(__name__)
 
 DATA_FOLDER = 'data'
 
+@app.route('/', methods=['GET', 'POST'])
+def landing():
+    return redirect(url_for('index', league_name="hmt_2025"))
+
+
 @app.route('/<league_name>', methods=['GET', 'POST'])
 def index(league_name):
 
