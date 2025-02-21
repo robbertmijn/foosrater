@@ -227,7 +227,7 @@
         })
 
         function fetchData(name) {
-            fetch(`/player/${name}`)
+            fetch(`/{{ league_name }}/player/${name}`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('overlay3Label').textContent = data.name;

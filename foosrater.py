@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List, Tuple
 import csv
+from collections import defaultdict
 
 
 class Player:
@@ -33,6 +34,53 @@ class Player:
             else:
                 self.league = "❌"
     
+
+    def get_player_profile(self):
+        
+        # with open(GAMES_FILE, 'r') as f:
+        #     games = json.load(f)
+
+        def countdict():
+            return {"opponent": 0, "made": 0, "let": 0, }
+        
+        # Store how many times players have played against each other
+        opponents = defaultdict(lambda: defaultdict(countdict))
+        teammates = defaultdict(int)
+        # teammates = defaultdict(lambda: defaultdict(int))
+        player_game_counts = defaultdict(int)
+
+        # Analyze all the matches in the data
+        for game in self.games:
+            
+            # Which position did the player play?
+            team = "red" if self.name in [game.R1.name, game.R2.name] else "blue"
+            opposing_team = "blue" if team == "red" else "red"
+            teammate_index = 1 if self.name in [game.R1.name, game.B1.name] else 0
+
+            team_players = {
+                "red": (game.R1.name, game.R2.name),
+                "blue": (game.B1.name, game.B2.name)
+            }
+
+            # Assign teammates
+            teammates[team_players[team][teammate_index]] += 1
+
+            # Assign opponents
+            for opponent in team_players[opposing_team]:
+                print(opponents[opponent]["opponent"]["opponent"])
+                opponents[opponent]["opponent"]["opponent"] += 1
+                opponents[opponent]["opponent"]["made"] += int(game.red_score if team == "red" else game.blue_score)
+                opponents[opponent]["opponent"]["let"] += int(game.blue_score if team == "red" else game.red_score)
+
+        opponents=sorted(opponents[self.name].items(), key=lambda x: x[1]["opponent"], reverse=True)[:5]
+        teammates=sorted(teammates[self.name].items(), key=lambda x: x[1], reverse=True)[:5]
+        
+        player_profile = dict(name=self.name, 
+                            opponents=opponents,
+                            teammates=teammates)
+            
+        return player_profile
+
 
     def plot_elo(self):
         import matplotlib.pyplot as plt
@@ -96,13 +144,11 @@ class League:
         """
         Adds the rows of a csv as games in the league
         order:
-        [name red1, name red2, name blue 1, name blue 2, red goals, blue goals, date]
+        [name red1, name red2, name blue 1, name blue 2, red score, blue score, date]
         """
         with open(foosfile, mode="r", encoding="utf-8") as file:
             game_rows = csv.DictReader(file)
-            print(game_rows)
             for game in game_rows:
-                print(game)
                 self.add_game([game["R1"], game["R2"], game["B1"], game["B2"]], 
                               game["red_score"], 
                               game["blue_score"], 
@@ -192,7 +238,7 @@ class League:
 
         # TODO: sort games on date
         for game in self.games:
-            # calculate proportion of red goals
+            # calculate proportion of red score
             game.red_outcome = game.red_score / (game.red_score + game.blue_score)
             # proportions add up to 1
             game.blue_outcome = 1 - game.red_outcome
@@ -267,6 +313,6 @@ def _load_team_elo(team):
 
 def _expected_outcome_red(red_elo, blue_elo, S: int=400):
     """
-    Returns expected proportion of goals the read team will make
+    Returns expected proportion of score the read team will make
     """
     return 1 / (1 + 10 ** ((blue_elo - red_elo) / S))

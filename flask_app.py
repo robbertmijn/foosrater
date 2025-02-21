@@ -3,7 +3,7 @@ import json
 import os
 import csv
 
-from foosrater import League
+from foosrater import League, Player
 
 ## TODO: Add time!
 
@@ -98,11 +98,15 @@ def delete_game(league_name, game_id):
     return redirect(url_for('index', league_name=league_name))
     
 
-@app.route('/player/<string:player>')
-def player_profile(player):
+@app.route('/<league_name>/player/<string:player_name>')
+def player_profile(league_name, player_name):
     
-    # data = get_player_profile(GAMES_FILE, player)
-    # print(data)
+    league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
+    league = League()
+    league.load_foosdat(league_data)
+    
+    data = league.players[player_name].get_player_profile()
+    print(data)
     
     return jsonify(data)
 
