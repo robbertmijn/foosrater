@@ -37,16 +37,12 @@ class Player:
 
     def get_player_profile(self):
         
-        # with open(GAMES_FILE, 'r') as f:
-        #     games = json.load(f)
-
         def countdict():
             return {"opponent": 0, "made": 0, "let": 0, }
         
         # Store how many times players have played against each other
-        opponents = defaultdict(lambda: defaultdict(countdict))
+        opponents = defaultdict(countdict)
         teammates = defaultdict(int)
-        # teammates = defaultdict(lambda: defaultdict(int))
         player_game_counts = defaultdict(int)
 
         # Analyze all the matches in the data
@@ -58,26 +54,27 @@ class Player:
             teammate_index = 1 if self.name in [game.R1.name, game.B1.name] else 0
 
             team_players = {
-                "red": (game.R1.name, game.R2.name),
-                "blue": (game.B1.name, game.B2.name)
-            }
+                "red": (game.R1.name if game.R1.name else "No Teammate", game.R2.name if game.R2.name else "No Teammate"),
+                "blue": (game.B1.name if game.B1.name else "No Teammate", game.B2.name if game.B2.name else "No Teammate")
+                }
 
             # Assign teammates
-            teammates[team_players[team][teammate_index]] += 1
-
+            team_list = team_players[team]
+            teammate = team_list[1] if self.name == team_list[0] else team_list[0]
+            teammates[teammate] += 1  # Increment teammate count
+            
             # Assign opponents
             for opponent in team_players[opposing_team]:
-                print(opponents[opponent]["opponent"]["opponent"])
-                opponents[opponent]["opponent"]["opponent"] += 1
-                opponents[opponent]["opponent"]["made"] += int(game.red_score if team == "red" else game.blue_score)
-                opponents[opponent]["opponent"]["let"] += int(game.blue_score if team == "red" else game.red_score)
-
-        opponents=sorted(opponents[self.name].items(), key=lambda x: x[1]["opponent"], reverse=True)[:5]
-        teammates=sorted(teammates[self.name].items(), key=lambda x: x[1], reverse=True)[:5]
+                opponents[opponent]["opponent"] += 1
+                opponents[opponent]["made"] += int(game.red_score if team == "red" else game.blue_score)
+                opponents[opponent]["let"] += int(game.blue_score if team == "red" else game.red_score)
+        
+        sorted_opponents = sorted(opponents.items(), key=lambda x: x[1]["opponent"], reverse=True)[:5]
+        sorted_teammates = sorted(teammates.items(), key=lambda x: x[1], reverse=True)[:5]
         
         player_profile = dict(name=self.name, 
-                            opponents=opponents,
-                            teammates=teammates)
+                            opponents=sorted_opponents,
+                            teammates=sorted_teammates)
             
         return player_profile
 
