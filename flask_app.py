@@ -1,11 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, send_from_directory
 import json
 import os
 import csv
 
 from foosrater import League, Player
-
-## TODO: Add time!
 
 app = Flask(__name__)
 
@@ -90,9 +88,7 @@ def delete_game(league_name, game_id):
     league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
     league = League()
     league.load_foosdat(league_data)
-    
     league.games.pop(game_id)
-    
     league.save_foosdat(league_data)
     
     return redirect(url_for('index', league_name=league_name))
@@ -109,6 +105,11 @@ def player_profile(league_name, player_name):
     print(data)
     
     return jsonify(data)
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 if __name__ == '__main__':
