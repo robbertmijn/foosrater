@@ -177,3 +177,55 @@ td.team {
         padding-right: 5px;
     }
 }
+
+
+.fab-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fab {
+    width: 56px;
+    height: 56px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.fab-options {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.fab-options button, .fab-options a {
+    margin: 5px 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: white;
+    background-color: #343a40;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.fab-options a {
+    text-decoration: none;
+}
