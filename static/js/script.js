@@ -65,14 +65,6 @@ function sendPostRequest(url) {
     });
 }   
 
-document.getElementById('fabButton').addEventListener('click', function () {
-    let options = document.querySelector('.fab-options');
-    let fabIcon = this.querySelector('i');
-    if (options.style.display === 'flex') {
-        options.style.display = 'none';
-        fabIcon.classList.replace('fa-times', 'fa-plus');
-    } else {
-        options.style.display = 'flex';
-        fabIcon.classList.replace('fa-plus', 'fa-times');
-    }
-});
+function toggleMenu() {
+    document.getElementById("menu").classList.toggle("d-flex");
+}
