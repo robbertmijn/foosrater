@@ -286,8 +286,8 @@ class League:
         Sort games list based on date
         """
         # Sort the dict
-        self.games = list(reversed(sorted(self.games, key=lambda game: game.date_time)))
-        game_ids = reversed(range(len(self.games)))
+        self.games = list(sorted(self.games, key=lambda game: game.date_time))
+        game_ids = range(len(self.games))
         for game, game_id in zip(self.games, game_ids):
             game.id = game_id
             
