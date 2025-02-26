@@ -66,5 +66,10 @@ function sendPostRequest(url) {
 }   
 
 function toggleMenu() {
-    document.getElementById("menu").classList.toggle("d-flex");
+    let menu = document.getElementById("menu");
+    if (menu.style.display === "none" || menu.style.display === "") {
+        menu.style.display = "flex";
+    } else {
+        menu.style.display = "none";
+    }
 }
