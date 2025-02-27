@@ -240,7 +240,7 @@ class League:
             # proportions add up to 1
             game.blue_outcome = 1 - game.red_outcome
 
-            game.expected_outcome_red = _expected_outcome_red(game.red_team_elo[0], game.blue_team_elo[0], self.S)
+            game.expected_outcome_red = _expected_outcome(game.red_team_elo[0], game.blue_team_elo[0], self.S)
             game.expected_outcome_blue = 1 - game.expected_outcome_red
 
             game.abs_error = abs(game.expected_outcome_red - game.red_outcome)
@@ -308,8 +308,8 @@ def _load_team_elo(team):
         return (team[0].elo[-1] + team[1].elo[-1]) / 2, (len(team[0].games) + len(team[1].games)) / 2
         
 
-def _expected_outcome_red(red_elo, blue_elo, S: int=400):
+def _expected_outcome(team_elo, opponent_elo, S: int=400):
     """
-    Returns expected proportion of score the read team will make
+    Returns expected proportion of score the team will make
     """
-    return 1 / (1 + 10 ** ((blue_elo - red_elo) / S))
+    return 1 / (1 + 10 ** ((opponent_elo - team_elo) / S))

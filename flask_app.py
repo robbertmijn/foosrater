@@ -17,6 +17,10 @@ def landing():
 @app.route('/<league_name>', methods=['GET', 'POST'])
 def index(league_name):
 
+    if league_name == "hmt_2024":
+        from elo_2024 import _update_elo_2024
+        League._update_elo = _update_elo_2024
+        
     data = os.path.join(DATA_FOLDER, league_name + ".csv")
     league = League()
     league.load_foosdat(data)
