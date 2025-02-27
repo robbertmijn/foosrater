@@ -12,8 +12,18 @@ document.getElementById('foosform').addEventListener('submit', function(event) {
     }
 })
 
+document.addEventListener("DOMContentLoaded", function() {
+    // Get the hidden div
+    let configDiv = document.getElementById("config");
+
+    // Extract Jinja variables from data attributes
+    let leagueName = configDiv.getAttribute("data-league-name");
+
+});
+
+
 function fetchData(name) {
-    fetch(`/{{ league_name }}/player/${name}`)
+    fetch(`/${leagueName}/player/${name}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('overlay3Label').textContent = data.name;

@@ -203,41 +203,9 @@ td.team {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: transform 0.3s ease;
+    background-color: #28a745;
 }
 
 .fab:hover {
     transform: scale(1.1);
-}
-
-.fab-plus {
-    background-color: #28a745;
-}
-
-.fab-menu {
-    background-color: #28a745;
-}
-
-/* FAB Menu */
-.menu-container {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-.menu-container a {
-    text-decoration: none;
-    color: black;
-    padding: 5px 10px;
-    display: block;
-    font-size: 16px;
-}
-
-.menu-container a:hover {
-    background-color: #f1f1f1;
 }
