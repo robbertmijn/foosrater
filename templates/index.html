@@ -158,7 +158,7 @@
                     <ul class="list-group">
                         {% for player in players_ranked %}
                             <li class="list-group-item d-flex">
-                                {{ player.ranking }}.&nbsp;<span data-toggle="modal" data-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;(elo: {{ player.elo[-1] | int }}, {{ player.n_games }} games, {{ player.league }} league)
+                                {{ player.ranking }}.&nbsp;<span data-bs-toggle="modal" data-bs-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;(elo: {{ player.elo[-1] | int }}, {{ player.n_games }} games, {{ player.league }} league)
                             </li>
                         {% endfor %}
                         <li class="list-group-item d-flex">
@@ -166,7 +166,7 @@
                         </li>
                         {% for player in players_unranked %}
                             <li class="list-group-item d-flex">
-                                #.&nbsp;<span data-toggle="modal" data-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;(elo: {{ player.elo[-1] | int }}, {{ player.n_games }} games, {{ player.league }} league)
+                                #.&nbsp;<span data-bs-toggle="modal" data-bs-target="#overlay3" class="name-link" data-name= {{ player.name }} > {{ player.name }}</span>&nbsp;(elo: {{ player.elo[-1] | int }}, {{ player.n_games }} games, {{ player.league }} league)
                             </li>
                         {% endfor %}
 
@@ -185,12 +185,12 @@
         </div>
     </div>
 
-    <div class="modal fade" id="overlay3" tabindex="-1" role="dialog" aria-labelledby="overlay3Label" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="overlay3" tabindex="-21" role="dialog" aria-labelledby="overlay3Label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="overlay3Label">&nbsp;</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

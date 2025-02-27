@@ -12,17 +12,8 @@ document.getElementById('foosform').addEventListener('submit', function(event) {
     }
 })
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Get the hidden div
-    let configDiv = document.getElementById("config");
 
-    // Extract Jinja variables from data attributes
-    let leagueName = configDiv.getAttribute("data-league-name");
-
-});
-
-
-function fetchData(name) {
+function fetchData(name, leagueName) {
     fetch(`/${leagueName}/player/${name}`)
         .then(response => response.json())
         .then(data => {
@@ -51,10 +42,23 @@ function fetchData(name) {
 }
 
 document.querySelectorAll('.name-link').forEach(item => {
+
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     // Get the hidden div
+    //     let configDiv = document.getElementById("config");
+    
+    //     // Extract Jinja variables from data attributes
+    //     let leagueName = configDiv.getAttribute("data-league-name");
+    // });
+    let configDiv = document.getElementById("config");
+
+    // Extract Jinja variables from data attributes
+    let leagueName = configDiv.getAttribute("data-league-name");
+
     item.addEventListener('click', function() {
         const name = this.getAttribute('data-name');
         console.log(name)
-        fetchData(name);  // Call fetch function with the clicked word
+        fetchData(name, leagueName);  // Call fetch function with the clicked word
     });
 });
 
