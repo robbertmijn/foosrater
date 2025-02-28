@@ -43,13 +43,6 @@ function fetchData(name, leagueName) {
 
 document.querySelectorAll('.name-link').forEach(item => {
 
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     // Get the hidden div
-    //     let configDiv = document.getElementById("config");
-    
-    //     // Extract Jinja variables from data attributes
-    //     let leagueName = configDiv.getAttribute("data-league-name");
-    // });
     let configDiv = document.getElementById("config");
 
     // Extract Jinja variables from data attributes
@@ -57,7 +50,6 @@ document.querySelectorAll('.name-link').forEach(item => {
 
     item.addEventListener('click', function() {
         const name = this.getAttribute('data-name');
-        console.log(name)
         fetchData(name, leagueName);  // Call fetch function with the clicked word
     });
 });

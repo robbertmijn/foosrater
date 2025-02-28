@@ -106,7 +106,6 @@ def player_profile(league_name, player_name):
     league.load_foosdat(league_data)
     
     data = league.players[player_name].get_player_profile()
-    print(data)
     
     return jsonify(data)
 
