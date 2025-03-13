@@ -1,4 +1,4 @@
-from foosrater import _expected_outcome
+from foosrater import League, _expected_outcome
 
 def _update_elo_2024(self):
     """
@@ -41,3 +41,7 @@ def _update_elo_2024(self):
         game.B2.elo.append(game.B2.elo[-1] + game.b2_elo_delta)
     
     self._sort_players()
+    
+    
+class HMT2024League(League):
+    _update_elo = _update_elo_2024  # Override at the class level for this league type
