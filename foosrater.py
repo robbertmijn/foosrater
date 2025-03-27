@@ -25,6 +25,7 @@ class Player:
                 (1050, "🗜️"), 
                 (1100, "🦒"),
                 (1150, "🦋"),
+                (1150, "🍽️")
             ]
 
         for threshold, img in league_ranges:
