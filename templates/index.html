@@ -16,7 +16,7 @@
 
             <button class="fab fab" data-bs-toggle="modal" data-bs-target="#overlay2">+</button>
             <button class="fab fab" data-bs-toggle="modal" data-bs-target="#overlay1">🏆</button>
-            <button class="fab fab" data-bs-toggle="modal" data-bs-target="#">⚙️</button>
+            <button class="fab fab" data-bs-toggle="modal" data-bs-target="#overlay4">?</button>
 
         </div>
         <div class="container my-2">
@@ -200,6 +200,41 @@
                     <h6>Top 5 teammates:</h6>
                     <ol id="list-teammates"></ol>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="overlay4" tabindex="-21" role="dialog" aria-labelledby="overlay4Label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="overlay4Label">Help</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <p>
+                    Welcome to your own Foosrate league! Share the link of this page with other players in your league (for example by printing a QR code). Anyone with that link can add, edit, or remove games from the league (so it's not at all password protected!!). 
+                </p>
+                <h3>
+                    How it works:
+                </h3>
+                <p>
+                    After you've played your game, add the result using the + button. Fill out the names of the players and the scores. Each player should have a unique name. An ELO system is in effect that estimates the outcome of a game based on the average rating of the players in a team. If your team scores above expectation, your rating will rise. The other teams' rating will fall. 
+                </p>
+                <h3>
+                    Ranking
+                </h3>
+                <p>
+                    Players with 3 games or more will become "Ranked". Using the 🏆 you can view the ranking. Press the names to view stats about a player. 
+                </p>
+                <h3>
+                    Contribute
+                </h3>
+                <p>
+                    Yes please! This is a hobby project and I'm not a professional at all! <a href="https://github.com/robbertmijn/foosrater">https://github.com/robbertmijn/foosrater</a>
+                </p>
             </div>
         </div>
     </div>
