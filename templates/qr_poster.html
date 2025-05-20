@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>QR Poster for {{ league_name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: white;
+        color: #333;
+        padding: 4cm 2cm;
+        margin: 0;
+        width: 21cm; /* A4 width */
+        height: 29.7cm; /* A4 height */
+        box-sizing: border-box;
+      }
+
+      .poster {
+        border: 2px solid #000;
+        padding: 2cm;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 0.5em;
+      }
+
+      p {
+        font-size: 1.2em;
+        margin: 1em 0;
+      }
+
+      a {
+        color: #0066cc;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      img {
+        margin-top: 2em;
+        width: 250px;
+        height: 250px;
+      }
+
+      @media print {
+        body {
+          padding: 0;
+        }
+        .poster {
+          border: none;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="poster">
+      <h1>Welcome to the {{ league_name }} foosball league!</h1>
+      <p>Scan the QR code below to access the league page:</p>
+      <p><a href="{{ target_url }}">{{ target_url }}</a></p>
+      <img src="data:image/png;base64,{{ img_base64 }}" alt="QR Code" />
+    </div>
+  </body>
+</html>
