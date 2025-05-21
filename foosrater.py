@@ -261,7 +261,7 @@ class League:
             game.B1.elo.append(game.B1.elo[-1] + game.b1_elo_delta)
             game.B2.elo.append(game.B2.elo[-1] + game.b2_elo_delta)
         
-        self._sort_players()
+        # self._sort_players()
             
 
     def _sort_players(self):
@@ -272,12 +272,21 @@ class League:
         # Sort the dict
         self.players = dict(reversed(sorted(self.players.items(), key=lambda kv: kv[1].elo[-1])))
         
+        # extract player names from last x games
+        # self._sort_games()
+        incl_players = [getattr(obj, attr) for obj in self.games[-5:] for attr in ("R1", "R2", "B1", "B2") if hasattr(obj, attr)]
+        print("sorting")
+        print(incl_players)
+        
         # Based on position in the new dict, set ranking
         rank = 1
         for player in self.players.values():
-            if player.n_games >= 3:
+            if player.name in incl_players:
                 player.ranking = rank
                 rank += 1
+            # if player.n_games >= 3:
+            #     player.ranking = rank
+            #     rank += 1
             else:
                 player.ranking = 0
     

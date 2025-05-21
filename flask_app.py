@@ -42,7 +42,8 @@ def index(league_name):
         league.save_foosdat(data)
         
         return redirect(url_for('index', league_name=league_name))
-    
+    league._sort_games()
+    league._sort_players()
     # extract games and player dicts to send to HTML
     games = reversed([game.__dict__ for game in league.games])
     players_ranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games >= 3]
