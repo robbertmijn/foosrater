@@ -1,4 +1,9 @@
-document.getElementById('date_time').value = new Date().toISOString().slice(0, 19);
+const now = new Date();
+const localISOTime = now.toISOString().slice(0, 19); // UTC
+const offset = now.getTimezoneOffset() * 60000;
+const localTime = new Date(now.getTime() - offset).toISOString().slice(0, 19);
+document.getElementById('date_time').value = localTime;
+
 document.getElementById('foosform').addEventListener('submit', function(event) {
     const dropdown1 = parseInt(document.getElementById('blue_score').value);
     const dropdown2 = parseInt(document.getElementById('red_score').value);

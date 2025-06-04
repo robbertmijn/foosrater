@@ -1,9 +1,15 @@
 from datetime import datetime
-from typing import List, Tuple
 import csv
 from collections import defaultdict
 
 
+def parse_datetime(date_time_str):
+    try:
+        return datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M:%S")
+    except ValueError:
+        return datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
+    
+    
 class Player:
 
     def __init__(self, name: str, elo: list = [1000], games: list = None):
@@ -208,7 +214,7 @@ class League:
             cur_players.append(self.players[player_name])
         
         # initialize new game object and insert at beginning of games list
-        date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M:%S")
+        date_time = parse_datetime(date_time_str)
         game = Game(len(self.games), cur_players, red_score, blue_score, date_time)
         self.games.insert(insert, game)
         
