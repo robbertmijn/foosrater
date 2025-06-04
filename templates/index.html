@@ -22,6 +22,15 @@
         <div class="container my-2">
             <table class="table">
                 <tbody>
+                    {% set games = games | list %}
+                    {% if not games %}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <h3>No games added yet!</h3>
+                                <p>Click the + button to add your first game.</p>
+                            </td>
+                        </tr>
+                    {% endif %}
                     {% for game in games %}
                     <tr>
                         <td class="actions">
