@@ -1,12 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_from_directory
-import json
 import os
 import csv
 import qrcode
 import io
 import base64
 
-from foosrater import League, Player
+from foosrater import League
 
 app = Flask(__name__)
 
