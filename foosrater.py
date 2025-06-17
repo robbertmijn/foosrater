@@ -19,6 +19,7 @@ class Player:
         self.n_games = 0
         self.league = "❌"
         self.ranking = 0
+        self.win_streak = [0]
     
     
     def _update_league(self):
@@ -110,12 +111,12 @@ class Game:
         self.id = id
         self.R1, self.R2, self.B1, self.B2 = players
         self.r1_elo = self.R1.elo[-1]
-        self.r2_elo = self.R2.elo[-1]
         self.r1_elo_delta = 0
+        self.r2_elo = self.R2.elo[-1]
         self.r2_elo_delta = 0
         self.b1_elo = self.B1.elo[-1]
-        self.b2_elo = self.B2.elo[-1]
         self.b1_elo_delta = 0
+        self.b2_elo = self.B2.elo[-1]
         self.b2_elo_delta = 0
         self.red_score = int(red_score)
         self.blue_score = int(blue_score)
@@ -123,6 +124,17 @@ class Game:
         self.red_team_elo = _load_team_elo((self.R1, self.R2))
         self.blue_team_elo = _load_team_elo((self.B1, self.B2))
         self.abs_error = 0
+        if red_score > blue_score:
+            self.r1_win_streak = self.R1.win_streak[-1] + 1
+            self.r2_win_streak = self.R2.win_streak[-1] + 1
+            self.b1_win_streak = 0
+            self.b2_win_streak = 0
+        else:
+            self.r1_win_streak = 0
+            self.r2_win_streak = 0
+            self.b1_win_streak = self.B1.win_streak[-1] + 1
+            self.b2_win_streak = self.B2.win_streak[-1] + 1
+
 
 
     def __repr__(self):
@@ -241,8 +253,8 @@ class League:
         # Reset each players' rating, initialize a list starting with the init_elo (1000)
         for player in self.players.values():
             player.elo = [self.init_elo]
+            player.win_streak = [0]
 
-        # TODO: sort games on date
         for game in self.games:
             # calculate proportion of red score
             game.red_outcome = game.red_score / (game.red_score + game.blue_score)
@@ -268,6 +280,26 @@ class League:
             game.R2.elo.append(game.R2.elo[-1] + game.r2_elo_delta)
             game.B1.elo.append(game.B1.elo[-1] + game.b1_elo_delta)
             game.B2.elo.append(game.B2.elo[-1] + game.b2_elo_delta)
+
+            if game.red_outcome > game.blue_outcome:
+                game.R1.win_streak.append(game.R1.win_streak[-1] + 1)
+                game.r1_win_streak = game.R1.win_streak[-1]
+                game.R2.win_streak.append(game.R2.win_streak[-1] + 1)
+                game.r2_win_streak = game.R2.win_streak[-1]
+                game.B1.win_streak.append(0)
+                game.b1_win_streak = game.B1.win_streak[-1]
+                game.B2.win_streak.append(0)
+                game.b2_win_streak = game.B2.win_streak[-1]
+            else:
+                game.R1.win_streak.append(0)
+                game.r1_win_streak = game.R1.win_streak[-1]
+                game.R2.win_streak.append(0)
+                game.r2_win_streak = game.R2.win_streak[-1]
+                game.B1.win_streak.append(game.B1.win_streak[-1] + 1)
+                game.b1_win_streak = game.B1.win_streak[-1]
+                game.B2.win_streak.append(game.B2.win_streak[-1] + 1)
+                game.b2_win_streak = game.B2.win_streak[-1]
+
         
         self._sort_players()
             

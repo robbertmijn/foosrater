@@ -51,14 +51,14 @@
                             <div class="team-container team-red">
                                 <div class="player-card">
                                     <span class="player-rating">{{ game.r1_elo | int }}</span>
-                                    <span class="player-name">{{ game.R1.name }}</span>
+                                    <span class="player-name">{{ game.R1.name }} (st: {{ game.r1_win_streak }})</span>
                                     <span class="player-delta">{% if game.r1_elo_delta >= 0 %}+{% endif %}{{ game.r1_elo_delta | default(0) | round(1) }}</span>
                                 </div>
                                 {% if game.R2.name != "" %}
                                 <div class="player-card">
                                     <!-- <span class="emoji">{{ game.R2.league }}</span> -->
                                     <span class="player-rating">{{ game.r2_elo | int }}</span>
-                                    <span class="player-name">{{ game.R2.name }}</span>
+                                    <span class="player-name">{{ game.R2.name }} (st: {{ game.r2_win_streak }})</span>
                                     <span class="player-delta">{% if game.r2_elo_delta >= 0 %}+{% endif %}{{ game.r2_elo_delta | default(0) | round(1) }}</span>
                                 </div>
                                 {% endif %}
@@ -74,14 +74,14 @@
                                 <div class="player-card">
                                     <span class="player-rating">{{ game.b1_elo | int }}</span>
                                     <!-- <span class="emoji">{{ game.B1.league }}</span> -->
-                                    <span class="player-name">{{ game.B1.name }}</span>
+                                    <span class="player-name">{{ game.B1.name }} (st: {{ game.b1_win_streak }})</span>
                                     <span class="player-delta">{% if game.b1_elo_delta >= 0 %}+{% endif %}{{ game.b1_elo_delta | default(0) | round(1) }}</span>
                                 </div>
                                 {% if game.B2.name != "" %}
                                 <div class="player-card">
                                     <span class="player-rating">{{ game.b2_elo | int }}</span>
                                     <!-- <span class="emoji">{{ game.B2.league }}</span> -->
-                                    <span class="player-name">{{ game.B2.name }}</span>
+                                    <span class="player-name">{{ game.B2.name }} (st: {{ game.b2_win_streak }})</span>
                                     <span class="player-delta">{% if game.b2_elo_delta >= 0 %}+{% endif %}{{ game.b2_elo_delta | default(0) | round(1) }}</span>
                                 </div>
                                 {% endif %}
