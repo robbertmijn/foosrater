@@ -142,6 +142,8 @@ class League:
         self.K = 64
         self.S = 271
         self.init_elo = 1000.0
+        # Only players who played on one of the last `count_games` games are entered in the ranking
+        self.count_games = 75
 
 
     def load_foosdat(self, foosfile):
@@ -275,13 +277,19 @@ class League:
         Sort player list based on their latest elo rating
         """
 
+        recent_players = {
+            player.name
+            for game in self.games[-self.count_games:]
+            for player in (game.R1, game.R2, game.B1, game.B2)
+        }
+        
         # Sort the dict
         self.players = dict(reversed(sorted(self.players.items(), key=lambda kv: kv[1].elo[-1])))
         
         # Based on position in the new dict, set ranking
         rank = 1
         for player in self.players.values():
-            if player.n_games >= 3:
+            if player.n_games >= 3 and player.name in recent_players:
                 player.ranking = rank
                 rank += 1
             else:

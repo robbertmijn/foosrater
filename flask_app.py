@@ -44,8 +44,9 @@ def index(league_name):
     
     # extract games and player dicts to send to HTML
     games = reversed([game.__dict__ for game in league.games])
-    players_ranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games >= 3]
-    players_unranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.n_games <= 2]
+    league._sort_players()
+    players_ranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.ranking > 0]
+    players_unranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.ranking == 0]
                 
     return render_template('index.html', players_ranked=players_ranked, players_unranked=players_unranked, games=games, league_name=league_name)
 
