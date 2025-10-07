@@ -20,6 +20,9 @@ class Player:
         self.league = "❌"
         self.ranking = 0
         self.win_streak = [0]
+        self.badges = []
+        ## TODO: badges
+        # x games played: in fibbonacci :-)
     
     
     def _update_league(self):
@@ -85,20 +88,6 @@ class Player:
                             teammates=sorted_teammates)
             
         return player_profile
-
-
-    def plot_elo(self):
-        import matplotlib.pyplot as plt
-        from datetime import datetime
-        plt.figure("Scatterplot with Dates", figsize=(8, 6))  # Creates or references a figure named "Scatterplot with Dates"
-        plt.clf()  # Clear the figure to overwrite any existing content
-        plt.scatter([datetime.strptime(g.date_time, "%Y-%m-%d") for g in self.games], self.elo[1:])
-        plt.plot([datetime.strptime(g.date_time, "%Y-%m-%d") for g in self.games], self.elo[1:])
-
-        plt.show()
-
-    def __repr__(self):
-        return self.name
 
 
 class Game:
@@ -240,7 +229,7 @@ class League:
         # adds game to the player objects, and to the league object
         for player in cur_players:
             player.games.insert(insert, game)
-            player.n_games = len(player.games)
+            # player.n_games = len(player.games)
             player._update_league()
         
 
@@ -250,10 +239,11 @@ class League:
         """
         K = self.K
 
-        # Reset each players' rating, initialize a list starting with the init_elo (1000)
+        # Reset each players' rating, initialize a list starting with the init_elo (1000). Current state of players are accessible in game.R1, game.R2, game.B1, and game.B2.
         for player in self.players.values():
             player.elo = [self.init_elo]
             player.win_streak = [0]
+            player.n_games = len(player.games)
 
         for game in self.games:
             # calculate proportion of red score
@@ -275,7 +265,7 @@ class League:
             game.r2_elo = game.R2.elo[-1]
             game.b1_elo = game.B1.elo[-1]
             game.b2_elo = game.B2.elo[-1]
-
+            
             game.R1.elo.append(game.R1.elo[-1] + game.r1_elo_delta)
             game.R2.elo.append(game.R2.elo[-1] + game.r2_elo_delta)
             game.B1.elo.append(game.B1.elo[-1] + game.b1_elo_delta)
@@ -299,6 +289,8 @@ class League:
                 game.b1_win_streak = game.B1.win_streak[-1]
                 game.B2.win_streak.append(game.B2.win_streak[-1] + 1)
                 game.b2_win_streak = game.B2.win_streak[-1]
+
+            # game.badges
 
         
         self._sort_players()
