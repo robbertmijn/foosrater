@@ -221,3 +221,71 @@ td.team {
 .fab:hover {
     transform: scale(1.1);
 }
+
+/* Layout */
+#list-badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  gap: 5px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Base badge card */
+.badge-card {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+font-size: 2.0rem; 
+font-weight: 700;
+  border-radius: 12px;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.25); /* improves contrast */
+}
+
+.badge-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 70%);
+  transform: rotate(25deg);
+  pointer-events: none;
+}
+
+.badge-card:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+/* --- Festive Types --- */
+
+/* Gold */
+.gold {
+  background: linear-gradient(145deg, #ffd700, #ffb700);
+  border: 2px solid #e6a500;
+}
+
+/* Silver */
+.silver {
+  background: linear-gradient(145deg, #d9d9d9, #bfbfbf);
+  border: 2px solid #a8a8a8;
+}
+
+/* Bronze */
+.bronze {
+  background: linear-gradient(145deg, #cd7f32, #b56b2c);
+  border: 2px solid #8b4513;
+}
+
+.badge-card::after {
+  animation: sparkle 3s linear infinite;
+}

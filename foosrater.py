@@ -1,7 +1,7 @@
 from datetime import datetime
 import csv
 from collections import defaultdict
-
+import math
 
 def parse_datetime(date_time_str):
     try:
@@ -22,7 +22,6 @@ class Player:
         self.win_streak = [0]
         self.badges = []
         ## TODO: badges
-        # x games played: in fibbonacci :-)
     
     
     def _update_league(self):
@@ -86,7 +85,8 @@ class Player:
         
         player_profile = dict(name=self.name, 
                             opponents=sorted_opponents,
-                            teammates=sorted_teammates)
+                            teammates=sorted_teammates, 
+                            badges=self.badges)
             
         return player_profile
 
@@ -266,7 +266,19 @@ class League:
             game.r2_elo = game.R2.elo[-1]
             game.b1_elo = game.B1.elo[-1]
             game.b2_elo = game.B2.elo[-1]
+
+            def is_perfect_square(x):
+                s = int(math.isqrt(x))
+                return s * s == x
             
+            for P in (game.R1, game.R2, game.B1, game.B2):
+                # determine if in fibb sequence
+                if is_perfect_square(5 * P.n_games * P.n_games + 4) or is_perfect_square(5 * P.n_games * P.n_games - 4):
+                    material = "bronze" if P.n_games < 20 else "silver" if P.n_games < 100 else "gold" 
+                    badge = material + "_" + str(P.n_games)
+                    if badge not in P.badges:
+                        P.badges.append(badge)
+
             game.R1.elo.append(game.R1.elo[-1] + game.r1_elo_delta)
             game.R2.elo.append(game.R2.elo[-1] + game.r2_elo_delta)
             game.B1.elo.append(game.B1.elo[-1] + game.b1_elo_delta)
@@ -290,9 +302,6 @@ class League:
                 game.b1_win_streak = game.B1.win_streak[-1]
                 game.B2.win_streak.append(game.B2.win_streak[-1] + 1)
                 game.b2_win_streak = game.B2.win_streak[-1]
-
-            # game.badges
-
         
         self._sort_players()
             

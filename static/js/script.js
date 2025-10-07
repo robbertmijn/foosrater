@@ -40,6 +40,16 @@ function fetchData(name, leagueName) {
                 listContainer2.appendChild(listItem);
             });
 
+            const listContainer3 = document.getElementById('list-badges');
+            listContainer3.innerHTML = '';
+            data.badges.forEach(item => {
+                const [type, content] = item.split('_');
+                const listItem = document.createElement('li');
+                listItem.textContent = content;
+                listItem.classList.add('badge-card', type); // add shared + type-specific class
+                listContainer3.appendChild(listItem);
+            });
+
         })
         .catch(error => {
             console.error('Error fetching data:', error);
