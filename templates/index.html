@@ -45,6 +45,10 @@
                             <div class="d-flex flex-column align-items-center">
                                 <strong># {{ game.id }}</strong>
                                 <small>{{ game.date_time }}</small>
+                                {% for badge in game.badges %}
+                                    {{ badge }}
+                                {% endfor %}
+
                             </div>
                         </td>
                         <td class="team">

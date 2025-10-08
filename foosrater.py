@@ -114,6 +114,7 @@ class Game:
         self.red_team_elo = _load_team_elo((self.R1, self.R2))
         self.blue_team_elo = _load_team_elo((self.B1, self.B2))
         self.abs_error = 0
+        self.badges = []
         if red_score > blue_score:
             self.r1_win_streak = self.R1.win_streak[-1] + 1
             self.r2_win_streak = self.R2.win_streak[-1] + 1
@@ -278,6 +279,7 @@ class League:
                     badge = material + "_" + str(P.n_games)
                     if badge not in P.badges:
                         P.badges.append(badge)
+                        game.badges.append((P.name, badge))
 
             game.R1.elo.append(game.R1.elo[-1] + game.r1_elo_delta)
             game.R2.elo.append(game.R2.elo[-1] + game.r2_elo_delta)
