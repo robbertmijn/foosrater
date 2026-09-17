@@ -1,3 +1,4 @@
 Flask==3.1.1
 qrcode
 pillow
+psycopg[binary]>=3.2,<4
