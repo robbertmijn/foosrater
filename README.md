@@ -40,11 +40,69 @@ This repository contains a Flask web application that tracks 2v2 foosball game r
    pip install -r requirements.txt
    ```
 
-4. Run the Flask app:
+4. Set `DATABASE_URL` to a Supabase/Postgres connection string.
+
+5. Run the Flask app:
    ```bash
-   flask run
+   flask --app flask_app run
    ```
    The app will be accessible at [http://127.0.0.1:5000](http://127.0.0.1:5000).
+
+---
+
+## Vercel + Supabase setup
+
+The `vercel-supabase` branch stores games in PostgreSQL instead of local CSV files so it can run on Vercel's serverless Python runtime.
+
+### 1. Create the database table
+
+Create a Supabase project, open the SQL editor, and run the contents of:
+
+```text
+supabase_schema.sql
+```
+
+This creates the `public.games` table and an index used to retrieve each league chronologically.
+
+### 2. Migrate existing CSV files
+
+Each CSV filename becomes its league name. For example, `data/hmt_2025.csv` is imported as league `hmt_2025`.
+
+Generate SQL for one league:
+
+```bash
+python scripts/csv_to_sql.py data/hmt_2025.csv > supabase_import.sql
+```
+
+Generate one SQL file for all league CSVs:
+
+```bash
+python scripts/csv_to_sql.py data/*.csv > supabase_import.sql
+```
+
+If you are re-running an import and want to replace the existing rows for those leagues first:
+
+```bash
+python scripts/csv_to_sql.py --replace-leagues data/*.csv > supabase_import.sql
+```
+
+Inspect `supabase_import.sql`, then paste/run it in the Supabase SQL editor.
+
+### 3. Configure the database connection
+
+Copy a PostgreSQL connection string from Supabase and set it as:
+
+```text
+DATABASE_URL=postgresql://...
+```
+
+For Vercel, add `DATABASE_URL` as a project environment variable. A pooled Supabase connection string is recommended for serverless deployments.
+
+### 4. Deploy on Vercel
+
+Import this GitHub repository into Vercel and select the `vercel-supabase` branch for a preview deployment, or merge it to your production branch later. The root `app.py` exposes the Flask application to Vercel.
+
+The QR-poster route now derives its URL from the active host, so it works with Vercel preview URLs, the production Vercel URL, or a custom domain without hard-coded PythonAnywhere URLs.
 
 ---
 
@@ -76,13 +134,13 @@ For example, the expected outcome of a 1100 rated team vs a 900 rated team is $\
 
 ## Data storage
 
-Currently, games are stored in CSV files that are initiated in the `data` folder when you run the app
+On the `vercel-supabase` branch, games are stored in the `public.games` PostgreSQL table. Elo ratings and player statistics remain derived data and are recalculated from the game history when a league page is loaded.
 
 ---
 
 ## GUI
 
-The app retrieves games and players from the data folder and displays a list of games on the home page. Each time a game is added or edited (or the page is refreshed) ratings are recalculated and displayed.
+The app retrieves games for the requested league and displays a list of games on the home page. Each time a game is added or edited (or the page is refreshed) ratings are recalculated and displayed.
 
 ---
 
