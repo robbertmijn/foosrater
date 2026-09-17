@@ -1,145 +1,168 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, send_from_directory
-import os
-import csv
+from flask import Flask, abort, render_template, request, redirect, url_for, jsonify, send_from_directory
 import qrcode
 import io
 import base64
 
 from foosrater import League
+from storage import PostgresStorage
+
 
 app = Flask(__name__)
-
-DATA_FOLDER = 'data'
-
-# @app.route('/', methods=['GET', 'POST'])
-# def landing():
-#     return redirect(url_for('index', league_name="hmt_2025"))
+storage = PostgresStorage()
 
 
-@app.route('/<league_name>', methods=['GET', 'POST'])
-def index(league_name):
-
-    data = os.path.join(DATA_FOLDER, league_name + ".csv")
-    
+def _new_league(league_name):
     if league_name == "hmt_2024":
         from elo_2024 import HMT2024League
-        league = HMT2024League()
-    else:
-        league = League()
-    
-    league.load_foosdat(data)
-    
-    if request.method == 'POST':
+        return HMT2024League()
+    return League()
+
+
+def _date_to_string(value):
+    """Convert a Postgres datetime to the format expected by League.add_game."""
+    if hasattr(value, "strftime"):
+        return value.strftime("%Y-%m-%dT%H:%M:%S")
+    return str(value)
+
+
+def load_league(league_name):
+    """Load one league from Postgres and rebuild its derived Elo state."""
+    rows = storage.list_games(league_name)
+    league = _new_league(league_name)
+
+    for row in rows:
         league.add_game(
-            [request.form['red_player1'].strip(), request.form['red_player2'].strip(), request.form['blue_player1'].strip(), request.form['blue_player2'].strip()], 
-            request.form['red_score'], 
-            request.form['blue_score'], 
-            request.form['date_time'],
-            len(league.games)
+            [row["r1"], row["r2"], row["b1"], row["b2"]],
+            row["red_score"],
+            row["blue_score"],
+            _date_to_string(row["date_time"]),
         )
-        
-        league.save_foosdat(data)
-        
-        return redirect(url_for('index', league_name=league_name))
-    
-    # extract games and player dicts to send to HTML
+
+    return league, rows
+
+
+def _row_for_game_index(rows, game_id):
+    if game_id < 0 or game_id >= len(rows):
+        abort(404)
+    return rows[game_id]
+
+
+@app.route("/<league_name>", methods=["GET", "POST"])
+def index(league_name):
+    if request.method == "POST":
+        storage.add_game(
+            league_name=league_name,
+            r1=request.form["red_player1"].strip(),
+            r2=request.form["red_player2"].strip(),
+            b1=request.form["blue_player1"].strip(),
+            b2=request.form["blue_player2"].strip(),
+            red_score=request.form["red_score"],
+            blue_score=request.form["blue_score"],
+            date_time=request.form["date_time"],
+        )
+        return redirect(url_for("index", league_name=league_name))
+
+    league, _ = load_league(league_name)
+
     games = reversed([game.__dict__ for game in league.games])
     league._sort_players()
-    players_ranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.ranking > 0]
-    players_unranked = [player.__dict__ for player in league.players.values() if player.name != "" and player.ranking == 0]
-                
-    return render_template('index.html', players_ranked=players_ranked, players_unranked=players_unranked, games=games, league_name=league_name)
+    players_ranked = [
+        player.__dict__
+        for player in league.players.values()
+        if player.name != "" and player.ranking > 0
+    ]
+    players_unranked = [
+        player.__dict__
+        for player in league.players.values()
+        if player.name != "" and player.ranking == 0
+    ]
+
+    return render_template(
+        "index.html",
+        players_ranked=players_ranked,
+        players_unranked=players_unranked,
+        games=games,
+        league_name=league_name,
+    )
 
 
-@app.route('/create_league/<league_name>', methods=['GET', 'POST'])
+@app.route("/create_league/<league_name>", methods=["GET", "POST"])
 def create_league(league_name):
+    # Leagues are implicit in the games table. An empty league starts existing
+    # as soon as its first game is inserted.
+    return redirect(url_for("index", league_name=league_name))
 
-    # create new league
-    league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
-    if not os.path.exists(league_data):
-        # Create the file with headers
-        with open(league_data, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["R1", "R2", "B1", "B2", "red_score", "blue_score", "date_time"])
-    
-    return redirect(url_for('index', league_name=league_name))
-            
-                     
-@app.route('/<league_name>/edit_game/<int:game_id>', methods=['GET', 'POST'])
+
+@app.route("/<league_name>/edit_game/<int:game_id>", methods=["GET", "POST"])
 def edit_game(league_name, game_id):
-    
-    league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
-    league = League()
-    league.load_foosdat(league_data)
-    
-    game = league.games[game_id]
-    
-    if request.method == 'POST':
+    league, rows = load_league(league_name)
+    row = _row_for_game_index(rows, game_id)
 
-        league.edit_game(
-            [request.form['red_player1'].strip(), request.form['red_player2'].strip(), request.form['blue_player1'].strip(), request.form['blue_player2'].strip()], 
-            request.form['red_score'], 
-            request.form['blue_score'], 
-            request.form['date_time'],
-            game_id
+    if request.method == "POST":
+        storage.update_game(
+            game_id=row["id"],
+            league_name=league_name,
+            r1=request.form["red_player1"].strip(),
+            r2=request.form["red_player2"].strip(),
+            b1=request.form["blue_player1"].strip(),
+            b2=request.form["blue_player2"].strip(),
+            red_score=request.form["red_score"],
+            blue_score=request.form["blue_score"],
+            date_time=request.form["date_time"],
         )
-        
-        league.save_foosdat(league_data)
+        return redirect(url_for("index", league_name=league_name))
 
-        return redirect(url_for('index', league_name=league_name))
-    
-    return render_template('edit_game.html', game=game, game_id=game_id, league_name=league_name)
+    game = league.games[game_id]
+    return render_template(
+        "edit_game.html",
+        game=game,
+        game_id=game_id,
+        league_name=league_name,
+    )
 
 
-@app.route('/<league_name>/delete_game/<int:game_id>', methods=['POST'])
+@app.route("/<league_name>/delete_game/<int:game_id>", methods=["POST"])
 def delete_game(league_name, game_id):
+    _, rows = load_league(league_name)
+    row = _row_for_game_index(rows, game_id)
+    storage.delete_game(game_id=row["id"], league_name=league_name)
+    return redirect(url_for("index", league_name=league_name))
 
-    league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
-    league = League()
-    league.load_foosdat(league_data)
-    league.games.pop(game_id)
-    league.save_foosdat(league_data)
-    
-    return redirect(url_for('index', league_name=league_name))
-    
 
-@app.route('/<league_name>/player/<string:player_name>')
+@app.route("/<league_name>/player/<string:player_name>")
 def player_profile(league_name, player_name):
-    
-    league_data = os.path.join(DATA_FOLDER, league_name + ".csv")
-    league = League()
-    league.load_foosdat(league_data)
-    
+    league, _ = load_league(league_name)
     data = league.players[player_name].get_player_profile()
-    
     return jsonify(data)
 
 
-@app.route('/<league_name>/make_qr_poster')
+@app.route("/<league_name>/make_qr_poster")
 def make_qr_poster(league_name):
-    target_url = f"https://robbertmijn.pythonanywhere.com/{league_name}"
+    # Build the QR target from the active hostname so this works on Vercel
+    # preview/production domains and custom domains.
+    target_url = url_for("index", league_name=league_name, _external=True)
 
-    # Generate QR code
     qr = qrcode.QRCode(box_size=10, border=4)
     qr.add_data(target_url)
     qr.make(fit=True)
-    img = qr.make_image(fill="black", back_color="white")
+    img = qr.make_image(fill_color="black", back_color="white")
 
-    # Convert to base64
     buf = io.BytesIO()
     img.save(buf, format="PNG")
-    img_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+    img_base64 = base64.b64encode(buf.getvalue()).decode("utf-8")
 
-    return render_template("qr_poster.html",
-                           league_name=league_name,
-                           target_url=target_url,
-                           img_base64=img_base64)
+    return render_template(
+        "qr_poster.html",
+        league_name=league_name,
+        target_url=target_url,
+        img_base64=img_base64,
+    )
 
 
-@app.route('/favicon.ico')
+@app.route("/favicon.ico")
 def favicon():
-    return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory("static", "favicon.ico", mimetype="image/vnd.microsoft.icon")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
